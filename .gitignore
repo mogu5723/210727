@@ -1,0 +1,11 @@
+.vs
+hyunsung/
+library/
+Logs/
+obj/
+Packages/
+Temp/
+UserSettings/
+.vsconfig
+210726_project.sln
+Assembly-CSharp.csproj
