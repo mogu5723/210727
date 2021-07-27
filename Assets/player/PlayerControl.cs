@@ -27,11 +27,13 @@ public class PlayerControl : MonoBehaviour
         moveDirection = 0;
         if(Input.GetKey(KeyCode.LeftArrow)) moveDirection--;
         if(Input.GetKey(KeyCode.RightArrow)) moveDirection++;
+        if(Input.GetKeyDown(KeyCode.C)) 
+            rigid.velocity = new Vector2(rigid.velocity.x, 10f);
 
         if(moveDirection == 1) rend.flipX = false;
         else if(moveDirection == -1) rend.flipX = true;
 
-        rigid.velocity = new Vector2(moveDirection*speed, 0);
+        rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
 
         if(moveDirection != 0) anim.SetInteger("animNumber", 1);
         else anim.SetInteger("animNumber", 0);
