@@ -21,6 +21,7 @@ public class PlayerControl : MonoBehaviour
         floor = transform.Find("floor").gameObject;
 
         speed = 5f;
+        jumpMotion = false;
     }
     void Start()
     {
@@ -51,11 +52,25 @@ public class PlayerControl : MonoBehaviour
         if(moveDirection != 0 && stand) anim.SetInteger("animNumber", 1);
         else if(stand) anim.SetInteger("animNumber", 0);
     }
+    bool jumpMotion;
+    void EndJumpMotion(){
+        jumpMotion = false;
+    }
+    void addJump(){
+        if(Input.GetKey(KeyCode.C)){
+            rigid.velocity += new Vector2(0, 3f);
+        }
+    }
     void JumpControl(){
         if(Input.GetKeyDown(KeyCode.C) && stand){
             stand = false;
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
             anim.SetInteger("animNumber", 2);
+            anim.SetTrigger("change");
+            jumpMotion = true;
+        }
+        if(!stand && !jumpMotion){
+            anim.SetInteger("animNumber", 3);
         }
     }
 
