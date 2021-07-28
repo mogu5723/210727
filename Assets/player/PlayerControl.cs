@@ -8,12 +8,17 @@ public class PlayerControl : MonoBehaviour
     Rigidbody2D rigid;
     Animator anim;
 
+    GameObject floor;
+
     float speed;
+    public bool stand;
 
     private void Awake() {
         rend = gameObject.GetComponent<SpriteRenderer>();
         rigid = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
+
+        floor = transform.Find("floor").gameObject;
 
         speed = 5f;
     }
@@ -27,19 +32,36 @@ public class PlayerControl : MonoBehaviour
         moveDirection = 0;
         if(Input.GetKey(KeyCode.LeftArrow)) moveDirection--;
         if(Input.GetKey(KeyCode.RightArrow)) moveDirection++;
-        if(Input.GetKeyDown(KeyCode.C)) 
-            rigid.velocity = new Vector2(rigid.velocity.x, 10f);
 
         if(moveDirection == 1) rend.flipX = false;
         else if(moveDirection == -1) rend.flipX = true;
 
-        rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
+        if(stand) rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
+        else {
+            rigid.velocity += new Vector2(moveDirection*speed*Time.deltaTime*3, 0);
+            
+        }
+        if(rigid.velocity.x > speed)
+            rigid.velocity = new Vector2(speed, rigid.velocity.y);
+        else if(rigid.velocity.x < -speed)
+            rigid.velocity = new Vector2(-speed, rigid.velocity.y);
+        if(rigid.velocity.y < -15)
+            rigid.velocity = new Vector2(rigid.velocity.x, -15);
 
-        if(moveDirection != 0) anim.SetInteger("animNumber", 1);
-        else anim.SetInteger("animNumber", 0);
+        if(moveDirection != 0 && stand) anim.SetInteger("animNumber", 1);
+        else if(stand) anim.SetInteger("animNumber", 0);
     }
+    void JumpControl(){
+        if(Input.GetKeyDown(KeyCode.C) && stand){
+            stand = false;
+            rigid.velocity = new Vector2(rigid.velocity.x, 15f);
+            anim.SetInteger("animNumber", 2);
+        }
+    }
+
     void Update()
     {
         MoveControl();
+        JumpControl();
     }
 }
