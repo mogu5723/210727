@@ -31,6 +31,6 @@ public class BackgroundControl : MonoBehaviour
         while(cameraTransform.position.x - posX < -8) 
             posX += 16;
 
-        transform.position = new Vector3(posX, 0, 10f);
+        transform.position = new Vector3(posX, cameraTransform.position.y, 10f);
     }
 }
