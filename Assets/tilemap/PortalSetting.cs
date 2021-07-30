@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class PortalSetting : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject player;
+    public GameObject cameraObject;
+    CamearControl CCtrl;
+
+    public int[] mapCode;
+    public float sponPointX, sponPointY;
+    
+    private void Awake() {
+        CCtrl = cameraObject.GetComponent<CamearControl>();
+    }
     void Start()
     {
         
@@ -14,5 +23,11 @@ public class PortalSetting : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.name == "Player"){
+            CCtrl.PlayerSpon(mapCode[0], mapCode[1], sponPointX, sponPointY);
+        }
     }
 }

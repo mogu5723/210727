@@ -6,6 +6,7 @@ public class MapControl : MonoBehaviour
 {
     public Vector2 center;
     public Vector2 size;
+
     void Start()
     {
         
