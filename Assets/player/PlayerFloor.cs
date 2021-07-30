@@ -10,8 +10,10 @@ public class PlayerFloor : MonoBehaviour
     private void Awake() {
         ctrl = transform.parent.GetComponent<PlayerControl>();
         anim = transform.parent.GetComponent<Animator>();
+
+        ctrl.stand = false;
     }
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerStay2D(Collider2D other) {
         if(other.tag == "block"){
             ctrl.stand = true;
         }

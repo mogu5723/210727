@@ -22077,5 +22077,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e2a773ef798424a99d7a116542165d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  center: {x: 0, y: 0}
-  size: {x: 0, y: 0}
+  center: {x: -20, y: 2}
+  size: {x: 35, y: 10}

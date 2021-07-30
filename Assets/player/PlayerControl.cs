@@ -64,6 +64,7 @@ public class PlayerControl : MonoBehaviour
     void JumpControl(){
         if(Input.GetKeyDown(KeyCode.C) && stand){
             stand = false;
+            transform.Translate(new Vector3(0, 0.1f, 0));
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
             anim.SetInteger("animNumber", 2);
             anim.SetTrigger("change");
