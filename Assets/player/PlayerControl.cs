@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -20,8 +21,10 @@ public class PlayerControl : MonoBehaviour
 
         floor = transform.Find("floor").gameObject;
 
-        speed = 5f;
+        speed = 5.5f;
         jumpMotion = false;
+
+        transform.Find("Point Light 2D").GetComponent<Light2D>().intensity = 0.7f;
     }
     void Start()
     {
@@ -37,17 +40,18 @@ public class PlayerControl : MonoBehaviour
         if(moveDirection == 1) rend.flipX = false;
         else if(moveDirection == -1) rend.flipX = true;
 
-        if(stand) rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
+        rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
+        /*if(stand) rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
         else {
-            rigid.velocity += new Vector2(moveDirection*speed*Time.deltaTime*3, 0);
+            rigid.velocity += new Vector2(moveDirection*speed*Time.deltaTime*5, 0);
             
-        }
+        }*/
         if(rigid.velocity.x > speed)
             rigid.velocity = new Vector2(speed, rigid.velocity.y);
         else if(rigid.velocity.x < -speed)
             rigid.velocity = new Vector2(-speed, rigid.velocity.y);
-        if(rigid.velocity.y < -15)
-            rigid.velocity = new Vector2(rigid.velocity.x, -15);
+        if(rigid.velocity.y < -19)
+            rigid.velocity = new Vector2(rigid.velocity.x, -18f);
 
         if(moveDirection != 0 && stand) anim.SetInteger("animNumber", 1);
         else if(stand) anim.SetInteger("animNumber", 0);

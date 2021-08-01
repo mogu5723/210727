@@ -51,9 +51,11 @@ public class CamearControl : MonoBehaviour
          player.SetActive(false);
 
          mapCode[0] = mapCode0; mapCode[1] = mapCode1;
+         mCtrl = chapter[mapCode[0]].Map[mapCode[1]].GetComponent<MapControl>();
          chapter[mapCode0].Map[mapCode1].SetActive(true);
          target.position = new Vector3(x, y, 0);
          player.SetActive(true);
+         transform.position = new Vector3(x, y, -10f);
          StartCoroutine(FadeIn());
     }
 
