@@ -8,13 +8,20 @@ public class Stalactite : MonoBehaviour
     public float sponX, sponY;
     RaycastHit2D hit;
 
+    int state; //0 = stop, 1 = drop, 2 = conflict
+
     private void Awake() {
         rigid = gameObject.GetComponent<Rigidbody2D>();
+        sponX = transform.position.x;
+        sponY = transform.position.y;
     }
 
     private void OnEnable() {
         transform.position = new Vector3(sponX, sponY, 0);
+        gameObject.layer = 0;
         rigid.gravityScale = 0;
+        state = 0;
+        transform.GetComponent<PolygonCollider2D>().isTrigger = false;
     }
     void Start()
     {
@@ -24,9 +31,29 @@ public class Stalactite : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hit = Physics2D.Raycast(transform.position+new Vector3(0, -0.6f, 0), new Vector3(0, -1f, 0), 7f);
-        if(hit.collider != null && hit.collider.tag == "Player"){
-            rigid.gravityScale = 8;
+        if(state == 0){
+            hit = Physics2D.Raycast(transform.position+new Vector3(0, -0.6f, 0), new Vector3(0, -1f, 0), 7f);
+            if(hit.collider != null && hit.collider.tag == "Player"){
+                rigid.gravityScale = 8;
+                state = 1;
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(state == 1 && other.collider.tag == "Player"){
+            PlayerState pst = other.transform.GetComponent<PlayerState>();
+
+            pst.damaged(5f);
+            pst.stun(0.5f);
+            StartCoroutine(pst.knockback(transform.position, 10, 3));
+
+            gameObject.layer = 6;
+        }else if(state == 1 && other.collider.tag == "block"){
+            state = 2;
+            rigid.gravityScale = 0;
+            rigid.velocity = Vector2.zero;
+            transform.GetComponent<PolygonCollider2D>().isTrigger = true;
         }
     }
 }

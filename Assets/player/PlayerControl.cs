@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
     SpriteRenderer rend;
     Rigidbody2D rigid;
     Animator anim;
+    PlayerState state;
 
     GameObject floor;
 
@@ -18,6 +19,7 @@ public class PlayerControl : MonoBehaviour
         rend = gameObject.GetComponent<SpriteRenderer>();
         rigid = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
+        state = gameObject.GetComponent<PlayerState>();
 
         floor = transform.Find("floor").gameObject;
 
@@ -34,24 +36,20 @@ public class PlayerControl : MonoBehaviour
     int moveDirection;
     void MoveControl(){
         moveDirection = 0;
-        if(Input.GetKey(KeyCode.LeftArrow)) moveDirection--;
-        if(Input.GetKey(KeyCode.RightArrow)) moveDirection++;
+        if(!state.stunState){
+            if(Input.GetKey(KeyCode.LeftArrow)) moveDirection--;
+            if(Input.GetKey(KeyCode.RightArrow)) moveDirection++;
+        }
 
         if(moveDirection == 1) rend.flipX = false;
         else if(moveDirection == -1) rend.flipX = true;
 
         rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
-        /*if(stand) rigid.velocity = new Vector2(moveDirection*speed, rigid.velocity.y);
-        else {
-            rigid.velocity += new Vector2(moveDirection*speed*Time.deltaTime*5, 0);
-            
-        }*/
+        
         if(rigid.velocity.x > speed)
             rigid.velocity = new Vector2(speed, rigid.velocity.y);
         else if(rigid.velocity.x < -speed)
             rigid.velocity = new Vector2(-speed, rigid.velocity.y);
-        if(rigid.velocity.y < -19)
-            rigid.velocity = new Vector2(rigid.velocity.x, -18f);
 
         if(moveDirection != 0 && stand) anim.SetInteger("animNumber", 1);
         else if(stand) anim.SetInteger("animNumber", 0);
@@ -66,7 +64,7 @@ public class PlayerControl : MonoBehaviour
         }
     }
     void JumpControl(){
-        if(Input.GetKeyDown(KeyCode.C) && stand){
+        if(Input.GetKeyDown(KeyCode.C) && stand && !state.stunState){
             stand = false;
             transform.Translate(new Vector3(0, 0.1f, 0));
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);

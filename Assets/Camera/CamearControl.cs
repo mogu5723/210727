@@ -45,21 +45,23 @@ public class CamearControl : MonoBehaviour
         transform.position = new Vector3(clampX, clampY, -10f);
     }
 
-     public void PlayerSpon(int mapCode0, int mapCode1, float x, float y){
-         UIBlack.color = new Color(0, 0, 0, 1f);
-         chapter[mapCode[0]].Map[mapCode[1]].SetActive(false);
-         player.SetActive(false);
+    public void PlayerSpon(int mapCode0, int mapCode1, float x, float y){
+        if(fadeInCoroutine != null) StopCoroutine(fadeInCoroutine);
+        UIBlack.color = new Color(0, 0, 0, 1f);
+        chapter[mapCode[0]].Map[mapCode[1]].SetActive(false);
+        player.SetActive(false);
 
-         mapCode[0] = mapCode0; mapCode[1] = mapCode1;
-         mCtrl = chapter[mapCode[0]].Map[mapCode[1]].GetComponent<MapControl>();
-         chapter[mapCode0].Map[mapCode1].SetActive(true);
-         target.position = new Vector3(x, y, 0);
-         player.SetActive(true);
-         transform.position = new Vector3(x, y, -10f);
-         StartCoroutine(FadeIn());
+        mapCode[0] = mapCode0; mapCode[1] = mapCode1;
+        mCtrl = chapter[mapCode[0]].Map[mapCode[1]].GetComponent<MapControl>();
+        chapter[mapCode0].Map[mapCode1].SetActive(true);
+        target.position = new Vector3(x, y, 0);
+        player.SetActive(true);
+        transform.position = new Vector3(x, y, -10f);
+        fadeInCoroutine = StartCoroutine(FadeIn());
     }
 
     public Image UIBlack;
+    Coroutine fadeInCoroutine;
     IEnumerator FadeIn(){
         float count = 1f;
         while(count > 0){
