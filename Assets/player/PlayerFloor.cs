@@ -17,7 +17,7 @@ public class PlayerFloor : MonoBehaviour
         anim = transform.parent.GetComponent<Animator>();
         state = transform.parent.GetComponent<PlayerState>();
         
-        ctrl.stand = false;
+        state.stand = false;
 
         fallDamage = 0;
     }
@@ -37,13 +37,13 @@ public class PlayerFloor : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D other) {
         if(other.tag == "block"){
-            ctrl.stand = true;
+            state.stand = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if(other.tag == "block"){
-            ctrl.stand = false;
+            state.stand = false;
         }
     }
 }

@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: -6888756438569675735
     second: New Piskel (1)_0
+  - first:
+      213: 9173839873224666002
+    second: New Piskel (1)_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -110,7 +113,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 144
+        y: 288
         width: 512
         height: 144
       alignment: 0
@@ -122,6 +125,27 @@ TextureImporter:
       bones: []
       spriteID: 9249ede64883660a0800000000000000
       internalID: -6888756438569675735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Piskel (1)_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 32
+        height: 32
+      alignment: 9
+      pivot: {x: 0.25, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29beed572c6005f70800000000000000
+      internalID: 9173839873224666002
       vertices: []
       indices: 
       edges: []

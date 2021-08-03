@@ -25,10 +25,7 @@ public class CamearControl : MonoBehaviour
     }
     void Start()
     {
-        UIBlack.color = new Color(0, 0, 0, 1f);
-        chapter[mapCode[0]].Map[mapCode[1]].SetActive(true);
-        mCtrl = chapter[mapCode[0]].Map[mapCode[1]].GetComponent<MapControl>();
-        StartCoroutine(FadeIn());
+        
     }
 
     float lx, ly;
@@ -45,7 +42,7 @@ public class CamearControl : MonoBehaviour
         transform.position = new Vector3(clampX, clampY, -10f);
     }
 
-    public void PlayerSpon(int mapCode0, int mapCode1, float x, float y){
+    public void PlayerSpawn(int mapCode0, int mapCode1, float x, float y){
         if(fadeInCoroutine != null) StopCoroutine(fadeInCoroutine);
         UIBlack.color = new Color(0, 0, 0, 1f);
         chapter[mapCode[0]].Map[mapCode[1]].SetActive(false);

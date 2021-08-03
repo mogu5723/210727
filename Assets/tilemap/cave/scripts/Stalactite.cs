@@ -32,10 +32,13 @@ public class Stalactite : MonoBehaviour
     void Update()
     {
         if(state == 0){
-            hit = Physics2D.Raycast(transform.position+new Vector3(0, -0.6f, 0), new Vector3(0, -1f, 0), 7f);
-            if(hit.collider != null && hit.collider.tag == "Player"){
-                rigid.gravityScale = 8;
-                state = 1;
+            for(int i = -1; i < 2; i++){
+                hit = Physics2D.Raycast(transform.position+new Vector3(i, -0.6f, 0), new Vector3(0, -1f, 0), 7f, 136);
+                if(hit.collider != null && hit.collider.tag == "Player"){
+                    rigid.gravityScale = 8;
+                    state = 1;
+                    break;
+                }
             }
         }
     }
@@ -46,7 +49,7 @@ public class Stalactite : MonoBehaviour
 
             pst.damaged(5f);
             pst.stun(0.5f);
-            StartCoroutine(pst.knockback(transform.position, 10, 3));
+            StartCoroutine(pst.knockback(transform.position, 5, 3));
 
             gameObject.layer = 6;
         }else if(state == 1 && other.collider.tag == "block"){
