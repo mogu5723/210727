@@ -36,8 +36,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\2d-extras-2020.3\Tests\Editor\PlaceholderTests.cs" />
-     <None Include="Assets\2d-extras-2020.3\Tests\Editor\Unity.2D.Tilemap.Extras.EditorTests.asmdef" />
+     <Compile Include="Assets\Fonts\2d-extras-2020.3\Tests\Editor\PlaceholderTests.cs" />
+     <None Include="Assets\Fonts\2d-extras-2020.3\Tests\Editor\Unity.2D.Tilemap.Extras.EditorTests.asmdef" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
