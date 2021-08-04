@@ -48,8 +48,8 @@ public class Stalactite : MonoBehaviour
             PlayerState pst = other.transform.GetComponent<PlayerState>();
 
             pst.damaged(5f);
-            pst.stun(0.5f);
-            StartCoroutine(pst.knockback(transform.position, 5, 3));
+            pst.stun(0.3f);
+            StartCoroutine(pst.knockback(transform.position, 10, 3));
 
             gameObject.layer = 6;
         }else if(state == 1 && other.collider.tag == "block"){

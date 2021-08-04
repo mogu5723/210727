@@ -12,7 +12,7 @@ public class CamearControl : MonoBehaviour
 {
     public GameObject player; public Transform target;
     public float speed;
-    public MapArray[] chapter; MapControl mCtrl;
+    public MapArray[] chapter; public MapControl mCtrl;
     int[] mapCode = new int[2];
     float height; float width;
    
