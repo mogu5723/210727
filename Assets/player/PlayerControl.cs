@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
     SpriteRenderer rend;
     Rigidbody2D rigid;
     Animator anim;
+
     PlayerState state; Interaction interaction;
+    public InventoryManager invenManager;
 
     GameObject floor;
 
@@ -24,6 +27,8 @@ public class PlayerControl : MonoBehaviour
         jumpMotion = false;
 
         transform.Find("Point Light 2D").GetComponent<Light2D>().intensity = 0.7f;
+
+        slotSelectNumber = 1; pastSlotNumber = 1;
     }
     void Start()
     {
@@ -82,6 +87,7 @@ public class PlayerControl : MonoBehaviour
         MoveControl();
         JumpControl();
         Interact();
+        slotSelect();
     }
 
     //interaction
@@ -112,7 +118,6 @@ public class PlayerControl : MonoBehaviour
         return temp;
     }
 
-
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "mineral"){
             interactObj.Add(other.gameObject);
@@ -125,4 +130,19 @@ public class PlayerControl : MonoBehaviour
         }
     }
     
+
+    //use item
+    int slotSelectNumber, pastSlotNumber;
+    void slotSelect(){
+        pastSlotNumber = slotSelectNumber;
+        if(Input.GetKeyDown(KeyCode.Alpha1)) slotSelectNumber = 1;
+        else if(Input.GetKeyDown(KeyCode.Alpha2)) slotSelectNumber = 2;
+        else if(Input.GetKeyDown(KeyCode.Alpha3)) slotSelectNumber = 3;
+        else if(Input.GetKeyDown(KeyCode.Alpha4)) slotSelectNumber = 4;
+        else if(Input.GetKeyDown(KeyCode.Alpha5)) slotSelectNumber = 5;
+        else return;
+
+        invenManager.quickslot[pastSlotNumber-1].bgImage.color = new Color(1f, 1f, 1f, 80/256f);
+        invenManager.quickslot[slotSelectNumber-1].bgImage.color = new Color(251/256f, 255/256f, 0, 80/256f);
+    }
 }

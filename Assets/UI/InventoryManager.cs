@@ -14,25 +14,29 @@ public class Inventory
 public class InventoryManager : MonoBehaviour
 {
     List<Inventory> inven;
-    Inventory quickslot;
+    public Inventory[] quickslot;
     public Sprite[] itemSprite;
-    int invenSize;
+    //int invenSize;
+
     private void Awake() {
-        invenSize = 20;
+        //invenSize = 20;
         inven = new List<Inventory>();
+        quickslot = new Inventory[5];
 
-        quickslot = new Inventory();
-        quickslot.imageObj = transform.Find("quickslot1").gameObject;
-        quickslot.bgImage = quickslot.imageObj.transform.Find("bgImage").gameObject.GetComponent<Image>();
-        quickslot.image = quickslot.imageObj.transform.Find("image").gameObject.GetComponent<Image>();
-        quickslot.textGUI = quickslot.imageObj.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>();
-        quickslot.count = 0;
-        quickslot.image.enabled = false;
-        quickslot.textGUI.enabled = false;
+        for(int i = 1; i <= 5; i++){
+            quickslot[i-1] = new Inventory();
+            quickslot[i-1].imageObj = transform.Find("quickslot"+i).gameObject;
+            quickslot[i-1].bgImage = quickslot[i-1].imageObj.transform.Find("bgImage").gameObject.GetComponent<Image>();
+            quickslot[i-1].image = quickslot[i-1].imageObj.transform.Find("image").gameObject.GetComponent<Image>();
+            quickslot[i-1].textGUI = quickslot[i-1].imageObj.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>();
+            quickslot[i-1].count = 0;
+            quickslot[i-1].image.enabled = false;
+            quickslot[i-1].textGUI.enabled = false;
 
-        inven.Add(quickslot);
+            inven.Add(quickslot[i-1]);
+        }
 
-        for(int i = 0; i < invenSize; i++) inven.Add(createEmptyInven());
+        //for(int i = 0; i < invenSize; i++) inven.Add(createEmptyInven());
     }
 
     void Update()
