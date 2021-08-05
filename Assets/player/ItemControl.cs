@@ -11,7 +11,7 @@ public class ItemControl : MonoBehaviour
     public InventoryManager invenManager;
 
     public GameObject[] itemObjList;
-    public GameObject globalLight;
+    public GameObject globalLight; public GameObject effectSystem;
 
     public float projectileCooldown, leftProjectileCD;
 
@@ -42,12 +42,12 @@ public class ItemControl : MonoBehaviour
             invenManager.deleteItem(pCtrl.slotSelectNumber-1, 1);
             StartCoroutine(invenManager.cooldown("projectile", 1f));
 
-            itemObj = Instantiate(itemObjList[itemCode], transform.position, Quaternion.identity);
+            itemObj = Instantiate(itemObjList[itemCode], transform.position, Quaternion.identity, effectSystem.transform);
 
             itemObj.transform.Find("light2D").GetComponent<Light2D>().intensity = 1 - globalLight.GetComponent<Light2D>().intensity;
 
 
-            
+
 
             int dir;
             if(transform.GetComponent<SpriteRenderer>().flipX) dir = -1;
