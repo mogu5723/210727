@@ -132,7 +132,7 @@ public class PlayerControl : MonoBehaviour
     
 
     //use item
-    int slotSelectNumber, pastSlotNumber;
+    public int slotSelectNumber, pastSlotNumber;
     void slotSelect(){
         pastSlotNumber = slotSelectNumber;
         if(Input.GetKeyDown(KeyCode.Alpha1)) slotSelectNumber = 1;

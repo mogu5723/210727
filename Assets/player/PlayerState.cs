@@ -80,7 +80,7 @@ public class PlayerState : MonoBehaviour
         damaged(0);
         stunState = false; stunTime = 0;
         knockbackState = false;
-        mining = false; miningPower = 3f;
+        mining = false; miningPower = 10f;
         CCtrl.PlayerSpawn(mapCode0, mapCode1, respawnX, respawnY);
     }
 
