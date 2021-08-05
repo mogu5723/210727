@@ -143,6 +143,6 @@ public class PlayerControl : MonoBehaviour
         else return;
 
         invenManager.quickslot[pastSlotNumber-1].bgImage.color = new Color(1f, 1f, 1f, 80/256f);
-        invenManager.quickslot[slotSelectNumber-1].bgImage.color = new Color(251/256f, 255/256f, 0, 80/256f);
+        invenManager.quickslot[slotSelectNumber-1].bgImage.color = new Color(1f, 1f, 1f, 160/256f);
     }
 }

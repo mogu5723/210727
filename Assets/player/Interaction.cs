@@ -36,7 +36,7 @@ public class Interaction : MonoBehaviour
             if(hp <= 0){
                 hp = maxHP;
                 StartCoroutine(textup("+1", Color.white, obj, 12));
-                invenManager.addItem(0, "projectile", 1, 10);
+                invenManager.addItem(0, "projectile", 1, 99);
             }
             hpbar.fillAmount = hp/maxHP;
             yield return null;

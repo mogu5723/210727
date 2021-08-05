@@ -44,7 +44,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void Start() {
-        addItem(0, "projectile", 30, 10);
+        addItem(0, "projectile", 30, 99);
     }
 
     void Update()
