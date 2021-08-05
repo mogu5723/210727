@@ -54,9 +54,7 @@ public class Stalactite : MonoBehaviour
             gameObject.layer = 6;
         }else if(state == 1 && other.collider.tag == "block"){
             state = 2;
-            rigid.gravityScale = 0;
-            rigid.velocity = Vector2.zero;
-            transform.GetComponent<PolygonCollider2D>().isTrigger = true;
+            gameObject.layer = 6;
         }
     }
 }

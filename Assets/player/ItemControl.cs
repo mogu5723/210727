@@ -54,6 +54,7 @@ public class ItemControl : MonoBehaviour
             else dir = 1;
 
             itemObj.transform.position += new Vector3(dir*0.5f, 0.5f, 0);
+            if(dir == -1) itemObj.GetComponent<SpriteRenderer>().flipX = true;
 
             itemObj.GetComponent<Rigidbody2D>().velocity = new Vector2(dir*15f, 0);
         }

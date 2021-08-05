@@ -31,7 +31,9 @@ public class EffectSystem : MonoBehaviour
             rend[i] = fragmentArray[i].GetComponent<SpriteRenderer>();
 
             fragmentArray[i].SetActive(true);
+            rend[i].color = color;
             fragmentArray[i].GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized*power;
+            fragmentArray[i].GetComponent<Rigidbody2D>().rotation = Random.Range(0, 360);
         }
 
         yield return new WaitForSeconds(5f);
