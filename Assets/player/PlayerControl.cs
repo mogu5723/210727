@@ -55,8 +55,8 @@ public class PlayerControl : MonoBehaviour
         }
 
         if(!state.mining){
-            if((moveDirection != 0 && state.stand)) anim.SetInteger("animNumber", 1);
-            else if(state.stand) anim.SetInteger("animNumber", 0);
+            if((moveDirection != 0 && state.stand) && rigid.velocity.y < 1) anim.SetInteger("animNumber", 1);
+            else if(state.stand && rigid.velocity.y < 1) anim.SetInteger("animNumber", 0);
         }
     }
     bool jumpMotion;
@@ -70,7 +70,6 @@ public class PlayerControl : MonoBehaviour
     }
     void JumpControl(){
         if(Input.GetKeyDown(KeyCode.C) && state.stand && state.actionable()){
-            state.stand = false;
             transform.Translate(new Vector3(0, 0.1f, 0));
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
             anim.SetInteger("animNumber", 2);

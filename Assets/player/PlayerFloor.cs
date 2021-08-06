@@ -22,23 +22,21 @@ public class PlayerFloor : MonoBehaviour
         fallDamage = 0;
     }
 
-    private void Update() {
-        if(rigid.velocity.y < -40){
-            fallDamage = -rigid.velocity.y - 39; 
+    private void FixedUpdate() {
+        if(rigid.velocity.y < -30){
+            fallDamage = -rigid.velocity.y - 29; 
         }
     }
         
     private void OnTriggerEnter2D(Collider2D other) {
-        if(fallDamage > 0){
-            state.damaged(fallDamage);
-            state.stun(0.5f);
-            StartCoroutine(state.knockback(Vector3.zero, 0, 0));
-            fallDamage = 0;
-        }
-    }
-    private void OnTriggerStay2D(Collider2D other) {
         if(other.tag == "block"){
             state.stand = true;
+            if (fallDamage > 0){
+                state.damaged(fallDamage);
+                state.stun(0.5f);
+                StartCoroutine(state.knockback(Vector3.zero, 0, 0));
+                fallDamage = 0;
+            }
         }
     }
 

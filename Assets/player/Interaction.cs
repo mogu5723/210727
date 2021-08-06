@@ -15,7 +15,7 @@ public class Interaction : MonoBehaviour
     private void Awake() {
         anim = GetComponent<Animator>();
         state = GetComponent<PlayerState>();
-        textObj = WSCanvas.transform.Find("Text (TMP)").gameObject;
+        textObj = WSCanvas.transform.Find("Text").gameObject;
     }
     
     void Update()
@@ -35,7 +35,7 @@ public class Interaction : MonoBehaviour
             hp -= state.miningPower * Time.deltaTime;
             if(hp <= 0){
                 hp = maxHP;
-                StartCoroutine(textup("+1", Color.white, obj, 12));
+                StartCoroutine(textup("+1", Color.white, obj, 16));
                 invenManager.addItem(0, "projectile", 1, 99);
             }
             hpbar.fillAmount = hp/maxHP;
@@ -48,7 +48,7 @@ public class Interaction : MonoBehaviour
         obj.transform.Find("Canvas").Find("hpbar").gameObject.SetActive(false);
         state.mining = false;
     }
-    IEnumerator textup(string str, Color color, GameObject obj, float size){
+    IEnumerator textup(string str, Color color, GameObject obj, int size){
         Vector2 upPos;
         if(obj.GetComponent<BoxCollider2D>() != null){
             BoxCollider2D col = obj.GetComponent<BoxCollider2D>();
@@ -59,7 +59,7 @@ public class Interaction : MonoBehaviour
         
         GameObject text = Instantiate(textObj, upPos, Quaternion.identity);
 
-        TextMeshProUGUI textGUI = text.GetComponent<TextMeshProUGUI>();
+        Text textGUI = text.GetComponent<Text>();
         Rigidbody2D TRigid = text.GetComponent<Rigidbody2D>();
         text.transform.SetParent(WSCanvas.transform);
 
@@ -73,7 +73,7 @@ public class Interaction : MonoBehaviour
         Color temp = color;
         while(temp.a > 0){
             yield return null;
-            temp.a -= Time.deltaTime*2;
+            temp.a -= Time.deltaTime;
             textGUI.color = temp;
         }
 

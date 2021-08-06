@@ -8,7 +8,7 @@ public class PlayerState : MonoBehaviour
 {   
     public CamearControl CCtrl;
     Rigidbody2D rigid;
-    public Image hpBar; public TextMeshProUGUI hpText;
+    public Image hpBar; public Text hpText;
     public GameObject WSCanvas; GameObject textObj;
 
     public int maxHp, hp;
@@ -24,7 +24,7 @@ public class PlayerState : MonoBehaviour
     
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
-        textObj = WSCanvas.transform.Find("Text (TMP)").gameObject;
+        textObj = WSCanvas.transform.Find("Text").gameObject;
 
         respawn();
     }
@@ -62,8 +62,9 @@ public class PlayerState : MonoBehaviour
 
         Vector2 dir = new Vector2(Random.Range(-0.5f, 0.5f), 1f).normalized;
         text.transform.Translate(dir);
+        text.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
         text.GetComponent<Rigidbody2D>().gravityScale = 4;
-        text.GetComponent<TextMeshProUGUI>().text = "-"+damage;
+        text.GetComponent<Text>().text = "-"+damage;
         text.transform.localScale = new Vector3(1f,1f,1f);
         text.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
