@@ -51,7 +51,7 @@ public class PlayerState : MonoBehaviour
             hp = 0;
         }
         hpBar.fillAmount = hp/(float)maxHp;
-        hpText.text = "HP "+hp+"/"+maxHp;
+        hpText.text = hp+"/"+maxHp;
 
         if(hp <= 0 ) respawn();
         if(damage > 0) StartCoroutine(damagedText((int)damage));   

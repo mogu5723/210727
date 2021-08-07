@@ -8,7 +8,7 @@ public class Inventory
 {
     public GameObject imageObj;
     public Image bgImage, image, cooldownMask;
-    public TextMeshProUGUI textGUI;
+    public Text textGUI;
     public int itemCode, count, maxCount;
     public float cooldown;
     public string itemTag;
@@ -31,7 +31,7 @@ public class InventoryManager : MonoBehaviour
             quickslot[i-1].bgImage = quickslot[i-1].imageObj.transform.Find("bgImage").gameObject.GetComponent<Image>();
             quickslot[i-1].image = quickslot[i-1].imageObj.transform.Find("image").gameObject.GetComponent<Image>();
             quickslot[i-1].cooldownMask = quickslot[i-1].imageObj.transform.Find("cooldownMask").gameObject.GetComponent<Image>();
-            quickslot[i-1].textGUI = quickslot[i-1].imageObj.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>();
+            quickslot[i-1].textGUI = quickslot[i-1].imageObj.transform.Find("Text").gameObject.GetComponent<Text>();
             quickslot[i-1].count = 0;
             quickslot[i-1].cooldown = 0;
             quickslot[i-1].image.enabled = false;

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - block
   - mineral
+  - monster
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - fragment
   - Tilemap
   - exception1
-  - 
+  - Monster
   - 
   - 
   - 

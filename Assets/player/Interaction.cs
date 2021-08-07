@@ -35,7 +35,7 @@ public class Interaction : MonoBehaviour
             hp -= state.miningPower * Time.deltaTime;
             if(hp <= 0){
                 hp = maxHP;
-                StartCoroutine(textup("+1", Color.white, obj, 16));
+                StartCoroutine(textup("+1", Color.white, obj, 10));
                 invenManager.addItem(0, "projectile", 1, 99);
             }
             hpbar.fillAmount = hp/maxHP;
