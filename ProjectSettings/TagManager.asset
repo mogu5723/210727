@@ -17,8 +17,8 @@ TagManager:
   - fragment
   - Tilemap
   - exception1
-  - Monster
-  - 
+  - monster
+  - onlyForPlayers
   - 
   - 
   - 

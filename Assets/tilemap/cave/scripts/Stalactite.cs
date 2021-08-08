@@ -50,7 +50,7 @@ public class Stalactite : MonoBehaviour
 
             pst.damaged(5f);
             pst.stun(0.3f);
-            StartCoroutine(pst.knockback(transform.position, 10, 3));
+            pst.knockback(transform.position, 10, 3);
 
             rigid.velocity = new Vector2(0, -10f);
             gameObject.layer = 6;

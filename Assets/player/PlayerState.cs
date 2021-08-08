@@ -89,7 +89,10 @@ public class PlayerState : MonoBehaviour
         stunTime += t;
         stunState = true;
     }
-    public IEnumerator knockback(Vector3 v, float power, int mode){
+    public void knockback(Vector3 v, float power, int mode){
+        StartCoroutine(knockback_(v, power, mode));
+    }
+    IEnumerator knockback_(Vector3 v, float power, int mode){
         knockbackState = true;
 
         if(mode == 1){

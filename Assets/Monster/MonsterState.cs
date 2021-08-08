@@ -7,9 +7,12 @@ public class MonsterState : MonoBehaviour
 {
     GameObject WSCanvas, textObj;
 
-    SpriteRenderer rend;
+    Rigidbody2D rigid; Collider2D col;
+    SpriteRenderer rend; 
 
     Image hpBar; public int hp, maxHp; 
+    public float moveSpeed;
+    public float stunTime;
     public bool deadState;
 
 
@@ -18,6 +21,8 @@ public class MonsterState : MonoBehaviour
         WSCanvas = transform.parent.parent.GetComponent<DataSetting>().WSCanvas;
         textObj = transform.parent.parent.GetComponent<DataSetting>().textObj;
         
+        rigid = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
         rend = GetComponent<SpriteRenderer>();
 
         hpBar = transform.Find("Canvas").Find("hpbar").Find("bghp").Find("hp").GetComponent<Image>();
@@ -26,7 +31,11 @@ public class MonsterState : MonoBehaviour
     
     void Update()
     {
-        
+        if(stunTime > 0){
+            stunTime -= Time.deltaTime;
+            if(stunTime <= 0) 
+                stunTime = 0;
+        }
     }
 
     public void damaged(float damage){
@@ -49,6 +58,9 @@ public class MonsterState : MonoBehaviour
         deadState = true;
 
         transform.Find("Canvas").Find("hpbar").gameObject.SetActive(false);
+        col.enabled = false;
+        rigid.gravityScale = 0;
+        rigid.velocity = new Vector2(0, 0);
 
         Color temp = new Color(1f, 1f, 1f, 1f);
         while(temp.a > 0){
@@ -57,9 +69,9 @@ public class MonsterState : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        rend.color = new Color(1f, 1f, 1f, 1f);
+        rend.enabled = false;
     }
-
 
     IEnumerator damagedText(int damage){
         GameObject text = Instantiate(textObj, transform.position, Quaternion.identity);
@@ -79,5 +91,32 @@ public class MonsterState : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         Destroy(text);
+    }
+
+    public void stun(float t){
+        stunTime += t;
+    }
+
+    public void knockback(Vector3 v, float power, int mode){
+        StartCoroutine(knockback_(v, power, mode));
+    }
+    IEnumerator knockback_(Vector3 v, float power, int mode){
+        
+
+        if(mode == 1){
+            v = transform.position - v;
+        }else if(mode == 2){
+            if(v.x > 0) v = new Vector3(1f, 0, 0);
+            else v = new Vector3(-1f, 0, 0);
+        }else if(mode == 3){
+            if(transform.position.x - v.x > 0) v = new Vector3(1f, 0, 0);
+            else v = new Vector3(-1f, 0, 0);
+        }
+
+        rigid.velocity = new Vector2(0, rigid.velocity.y);
+        rigid.AddForce(v.normalized * power, ForceMode2D.Impulse);
+        while(stunTime > 0){
+            yield return null;
+        }
     }
 }

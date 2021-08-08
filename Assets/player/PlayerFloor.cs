@@ -34,7 +34,7 @@ public class PlayerFloor : MonoBehaviour
             if (fallDamage > 0){
                 state.damaged(fallDamage);
                 state.stun(0.5f);
-                StartCoroutine(state.knockback(Vector3.zero, 0, 0));
+                state.knockback(Vector3.zero, 0, 0);
                 fallDamage = 0;
             }
         }
