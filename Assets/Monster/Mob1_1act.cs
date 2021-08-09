@@ -8,10 +8,13 @@ public class Mob1_1act : MonoBehaviour
     Rigidbody2D rigid; BoxCollider2D col;
     SpriteRenderer rend;
     Animator anim;
+    GameObject effectSystem; GameObject attackObj;
 
     PlayerState PState;
 
-    Coroutine moveCoroutine;
+    Coroutine moveCoroutine; Coroutine attackCoroutine;
+
+    int stateNumber; // 1 = move, 2 = attack
 
     private void Awake() {
         state = GetComponent<MonsterState>();
@@ -19,22 +22,31 @@ public class Mob1_1act : MonoBehaviour
         rend = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         col = GetComponent<BoxCollider2D>();
+
+        effectSystem = transform.parent.parent.GetComponent<DataSetting>().EffectSystem;
+        attackObj = transform.Find("Mob1_1Attack0").gameObject;
+
+        state.spawnX = transform.position.x; state.spawnY = transform.position.y;
     }
 
     private void OnEnable() {
         stateSetting();
-        moveCoroutine = StartCoroutine(move0());
     }
 
     void stateSetting(){    //몬스터 기본 셋팅
         col.enabled = true;
         rigid.gravityScale = 8;
 
+        transform.position = new Vector3(state.spawnX, state.spawnY, 0);
+
         state.hp = state.maxHp = 30;
         state.stunTime = 0;
         state.deadState = false;
         state.moveSpeed = 2;
         rend.enabled = true;
+
+        moveCoroutine = StartCoroutine(move0());
+        attackCoroutine = StartCoroutine(attack0());
     }
     void Start()
     {
@@ -43,9 +55,7 @@ public class Mob1_1act : MonoBehaviour
 
     void Update()
     {
-        if(state.stunTime <= 0 && moveCoroutine == null && !state.deadState){
-            moveCoroutine = StartCoroutine(move0());
-        }
+        
     }
 
     RaycastHit2D hit; int raymask;
@@ -54,14 +64,14 @@ public class Mob1_1act : MonoBehaviour
     IEnumerator move0(){
         if(Random.Range(0f, 1f) > 0.5) dir = 1;
         else dir = -1;
-        raymask = 1 << 7;
 
         while(true){
-            yield return new WaitForFixedUpdate();
+            stateNumber = 1;
             for (int i = 0; i < 2; i++){    //오른쪽, 왼쪽 이동공간 탐색
                 movingTargetX = transform.position.x + Random.Range(0.5f, 1.5f) * dir;
                 movingDistanceX = Mathf.Abs(movingTargetX - transform.position.x);
 
+                raymask = 1 << 7;
                 hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), new Vector3(dir, 0, 0), movingDistanceX, raymask);
                 if (hit.collider != null && hit.collider.CompareTag("block")){
                     if (i == 0) dir *= -1;
@@ -83,33 +93,65 @@ public class Mob1_1act : MonoBehaviour
             if(dir != 0) anim.SetInteger("animNumber", 2);
             else {  //이동공간 못찾은경우 1초 정지 후 다시 탐색
                 anim.SetInteger("animNumber", 1);
-                if(state.stunTime <= 0 && !state.deadState)
-                    rigid.velocity = new Vector2(0, rigid.velocity.y);
-                else break;
+                rigid.velocity = new Vector2(0, rigid.velocity.y);
 
                 yield return new WaitForSeconds(1f);
+                if(state.deadState) break;
+                while(state.stunTime > 0 || stateNumber == 2) yield return null;
+
                 if(Random.Range(0f, 1f) > 0.5) dir = 1;
                 else dir = -1;
                 continue;
             }
 
             while (transform.position.x * dir < movingTargetX * dir){  //지정좌표까지 이동 무언가 막혔을 경우 방향 전환 후 다시 탐색
-                if(state.stunTime <= 0 && !state.deadState)
-                    rigid.velocity = new Vector2(dir * state.moveSpeed, rigid.velocity.y);
-                else break;
+                rigid.velocity = new Vector2(dir * state.moveSpeed, rigid.velocity.y);
 
                 yield return new WaitForFixedUpdate();
-                if(Mathf.Abs(rigid.velocity.x) < 0.05f) {
+                if(state.deadState) break;
+                if(state.stunTime > 0 || stateNumber == 2) break;
+
+                if (Mathf.Abs(rigid.velocity.x) < 0.05f){
                     dir *= -1;
                     break;
                 }
             }
-            if(state.stunTime > 0) break;
+            if(state.deadState) break;
+
+            while (state.stunTime > 0 || stateNumber == 2) yield return null;
 
             if(Random.Range(0, 1f) < 0.1) dir *= -1;
         }
+    }
 
-        moveCoroutine = null;
+    IEnumerator attack0(){
+        while(true){
+            while(true){
+                raymask = (1 << 7) + (1 << 3);
+                hit = Physics2D.Raycast(transform.position + new Vector3(0, 0.5f, 0), new Vector3(dir, 0, 0), 10f, raymask);
+
+                if(hit.collider != null && hit.collider.CompareTag("Player")) break;
+                yield return null;
+                while(state.stunTime > 0) yield return null;
+            }
+
+            stateNumber = 2;
+            anim.SetInteger("animNumber", 3);
+            rigid.velocity = new Vector2(0, rigid.velocity.y);
+            
+            yield return new WaitForSeconds(1f);
+            if(state.deadState) break;
+            GameObject attackObjClone = Instantiate(attackObj, transform.position, Quaternion.identity, effectSystem.transform);
+            attackObjClone.SetActive(true);
+            attackObjClone.transform.position += new Vector3(dir*0.5f, 0.5f, 0);
+            if(dir == -1) attackObjClone.GetComponent<SpriteRenderer>().flipX = true;
+            attackObjClone.GetComponent<Rigidbody2D>().velocity = new Vector2(dir*10f, 0);
+
+            yield return new WaitForSeconds(0.291f);
+            stateNumber = 1;
+
+            yield return new WaitForSeconds(3f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

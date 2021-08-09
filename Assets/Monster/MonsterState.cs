@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MonsterState : MonoBehaviour
 {
@@ -10,11 +11,11 @@ public class MonsterState : MonoBehaviour
     Rigidbody2D rigid; Collider2D col;
     SpriteRenderer rend; 
 
+    public float spawnX, spawnY;
     Image hpBar; public int hp, maxHp; 
     public float moveSpeed;
     public float stunTime;
     public bool deadState;
-
 
 
     private void Awake() {
@@ -46,6 +47,7 @@ public class MonsterState : MonoBehaviour
         if(hp <= 0) {
             damage += hp;
             hp = 0;
+
             StartCoroutine(dead());
         }
         hpBar.fillAmount = hp/(float)maxHp;
@@ -54,6 +56,7 @@ public class MonsterState : MonoBehaviour
         if(damage > 0) StartCoroutine(damagedText((int)damage));   
     }
 
+    
     IEnumerator dead(){
         deadState = true;
 
@@ -94,7 +97,8 @@ public class MonsterState : MonoBehaviour
     }
 
     public void stun(float t){
-        stunTime += t;
+        if(stunTime < t)
+            stunTime = t;
     }
 
     public void knockback(Vector3 v, float power, int mode){
@@ -118,5 +122,6 @@ public class MonsterState : MonoBehaviour
         while(stunTime > 0){
             yield return null;
         }
+        rigid.velocity = new Vector2(0, rigid.velocity.y);
     }
 }

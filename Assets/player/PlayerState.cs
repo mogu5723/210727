@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 public class PlayerState : MonoBehaviour
 {   
@@ -10,7 +11,8 @@ public class PlayerState : MonoBehaviour
     Rigidbody2D rigid;
     public Image hpBar; public Text hpText;
     public GameObject WSCanvas; GameObject textObj;
-
+ 
+    public UnityEvent onPlayerDead;
     public int maxHp, hp;
 
     public float respawnX, respawnY; public int mapCode0, mapCode1;
@@ -53,7 +55,10 @@ public class PlayerState : MonoBehaviour
         hpBar.fillAmount = hp/(float)maxHp;
         hpText.text = hp+"/"+maxHp;
 
-        if(hp <= 0 ) respawn();
+        if(hp <= 0 ) {
+            onPlayerDead.Invoke();
+            respawn();
+        }
         if(damage > 0) StartCoroutine(damagedText((int)damage));   
     }
     IEnumerator damagedText(int damage){
