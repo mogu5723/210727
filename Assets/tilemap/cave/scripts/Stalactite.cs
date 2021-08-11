@@ -45,12 +45,21 @@ public class Stalactite : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if(state == 1 && other.collider.tag == "Player"){
+        if(state == 1 && other.collider.CompareTag("Player")){
             PlayerState pst = other.transform.GetComponent<PlayerState>();
 
             pst.damaged(5f);
             pst.stun(0.3f);
             pst.knockback(transform.position, 10, 3);
+
+            rigid.velocity = new Vector2(0, -10f);
+            gameObject.layer = 6;
+        }else if(state == 1 && other.collider.CompareTag("monster")){
+            MonsterState mst = other.transform.GetComponent<MonsterState>();
+
+            mst.damaged(5f);
+            mst.stun(0.3f);
+            mst.knockback(transform.position, 10, 3);
 
             rigid.velocity = new Vector2(0, -10f);
             gameObject.layer = 6;

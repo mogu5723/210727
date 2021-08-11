@@ -8,7 +8,7 @@ public class Mob1_1act : MonoBehaviour
     Rigidbody2D rigid; BoxCollider2D col;
     SpriteRenderer rend;
     Animator anim;
-    GameObject effectSystem; GameObject attackObj;
+    GameObject effectSystemObj; GameObject attackObj; EffectSystem effectSystem;
 
     PlayerState PState;
 
@@ -23,7 +23,8 @@ public class Mob1_1act : MonoBehaviour
         anim = GetComponent<Animator>();
         col = GetComponent<BoxCollider2D>();
 
-        effectSystem = transform.parent.parent.GetComponent<DataSetting>().EffectSystem;
+        effectSystemObj = transform.parent.parent.GetComponent<DataSetting>().EffectSystem;
+        effectSystem = effectSystemObj.GetComponent<EffectSystem>();
         attackObj = transform.Find("Mob1_1Attack0").gameObject;
 
         state.spawnX = transform.position.x; state.spawnY = transform.position.y;
@@ -141,7 +142,8 @@ public class Mob1_1act : MonoBehaviour
             
             yield return new WaitForSeconds(1f);
             if(state.deadState) break;
-            GameObject attackObjClone = Instantiate(attackObj, transform.position, Quaternion.identity, effectSystem.transform);
+            GameObject attackObjClone = Instantiate(attackObj, transform.position, Quaternion.identity, effectSystemObj.transform);
+            effectSystem.tempObjList.Add(attackObjClone);
             attackObjClone.SetActive(true);
             attackObjClone.transform.position += new Vector3(dir*0.5f, 0.5f, 0);
             if(dir == -1) attackObjClone.GetComponent<SpriteRenderer>().flipX = true;

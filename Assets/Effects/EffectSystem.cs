@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class EffectSystem : MonoBehaviour
 {
+    public List<GameObject> tempObjList;
+    public List<Coroutine> coroutineList;
     GameObject square;
     private void Awake() {
+        tempObjList = new List<GameObject>();
+        coroutineList = new List<Coroutine>();
         square = transform.Find("squareFragment").gameObject;
     }
     void Start()
@@ -20,14 +24,14 @@ public class EffectSystem : MonoBehaviour
     }
 
     public void squareFragmentEffect(int count, Color color, float power, Vector3 pos){
-        StartCoroutine(squareFragmentEffect_(count, color, power, pos));
+        coroutineList.Add(StartCoroutine(squareFragmentEffect_(count, color, power, pos)));
     }
     IEnumerator squareFragmentEffect_(int count, Color color, float power, Vector3 pos){
         GameObject[] fragmentArray = new GameObject[count];
         SpriteRenderer[] rend = new SpriteRenderer[count];
 
         for(int i = 0; i < count; i++){
-            fragmentArray[i] = Instantiate(square, pos, Quaternion.identity);
+            tempObjList.Add(fragmentArray[i] = Instantiate(square, pos, Quaternion.identity));
             rend[i] = fragmentArray[i].GetComponent<SpriteRenderer>();
 
             fragmentArray[i].SetActive(true);
@@ -51,4 +55,18 @@ public class EffectSystem : MonoBehaviour
             Destroy(fragmentArray[i]);
         }
     }
+
+    public void deleteFrag(){
+        int count = coroutineList.Count;
+        for(int i = 0; i < count; i++){
+            StopCoroutine(coroutineList[0]);
+            coroutineList.RemoveAt(0);
+        }
+        count = tempObjList.Count;
+        for(int i = 0; i < count; i++){
+            Destroy(tempObjList[0]);
+            tempObjList.RemoveAt(0);
+        }
+    }
+
 }
