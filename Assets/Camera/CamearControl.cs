@@ -12,7 +12,7 @@ public class CamearControl : MonoBehaviour
 {
     public GameObject player; public Transform target;
     public float speed;
-    public MapArray[] chapter; public MapControl mCtrl;
+    public MapArray[] chapter; public MapControl mCtrl; public MapManager mapManager;
     int[] mapCode = new int[2];
     float height; float width;
    
@@ -45,6 +45,7 @@ public class CamearControl : MonoBehaviour
     public void PlayerSpawn(int mapCode0, int mapCode1, float x, float y){
         if(fadeInCoroutine != null) StopCoroutine(fadeInCoroutine);
         UIBlack.color = new Color(0, 0, 0, 1f);
+        mapManager.MoveStage();
         chapter[mapCode[0]].Map[mapCode[1]].SetActive(false);
         player.SetActive(false);
 

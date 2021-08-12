@@ -30,7 +30,6 @@ public class PortalSetting : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.name == "Player"){
             CCtrl.PlayerSpawn(mapCode[0], mapCode[1], sponPointX, sponPointY);
-            mapManager.MoveStage();
         }
     }
 }

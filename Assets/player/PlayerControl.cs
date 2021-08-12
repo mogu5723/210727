@@ -24,7 +24,7 @@ public class PlayerControl : MonoBehaviour
 
         floor = transform.Find("floor").gameObject;
 
-        jumpMotion = false;
+        isJumping = false;
 
         transform.Find("Point Light 2D").GetComponent<Light2D>().intensity = 0.7f;
 
@@ -54,14 +54,14 @@ public class PlayerControl : MonoBehaviour
                 rigid.velocity = new Vector2(-state.speed, rigid.velocity.y);
         }
 
-        if(!state.mining){
+        if(!state.isInteractive){
             if((moveDirection != 0 && state.stand) && rigid.velocity.y < 1) anim.SetInteger("animNumber", 1);
             else if(state.stand && rigid.velocity.y < 1) anim.SetInteger("animNumber", 0);
         }
     }
-    bool jumpMotion;
+    bool isJumping;
     void EndJumpMotion(){
-        jumpMotion = false;
+        isJumping = false;
     }
     void addJump(){
         if(Input.GetKey(KeyCode.C)){
@@ -74,9 +74,9 @@ public class PlayerControl : MonoBehaviour
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
             anim.SetInteger("animNumber", 2);
             anim.SetTrigger("change");
-            jumpMotion = true;
+            isJumping = true;
         }
-        if(!state.stand && !jumpMotion){
+        if(!state.stand && !isJumping){
             anim.SetInteger("animNumber", 3);
         }
     }
@@ -85,50 +85,19 @@ public class PlayerControl : MonoBehaviour
     {
         MoveControl();
         JumpControl();
-        Interact();
+        interaction.Interact();
         slotSelect();
+        AttackControl();
     }
 
-    //interaction
-    public List<GameObject> interactObj;
-
-    void Interact(){
-        if(Input.GetKeyDown(KeyCode.Space) && state.stand && state.actionable() && interactObj.Count > 0){
-            GameObject obj = GetCloseObject();
-
-            if(obj.name == "rock") StartCoroutine(interaction.mining(obj));
-        }
-    }
-    GameObject GetCloseObject(){
-        GameObject temp;
-        float minDistance, distance;
-        float posX;
-
-        posX = interactObj[0].transform.position.x + interactObj[0].GetComponent<BoxCollider2D>().size.x/2f-0.5f;
-        distance = minDistance = Mathf.Abs(transform.position.x - posX);
-        temp = interactObj[0];
-        foreach(GameObject obj in interactObj){
-            posX = obj.transform.position.x + obj.GetComponent<BoxCollider2D>().size.x/2f-0.5f;
-            distance = Mathf.Abs(transform.position.x - posX);
-            if(minDistance > distance) minDistance = distance;
-            temp = obj;
-        }
-
-        return temp;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "mineral"){
-            interactObj.Add(other.gameObject);
+    //attack
+    void AttackControl(){
+        if(state.actionable() && Input.GetKeyDown(KeyCode.Z) && !state.isAttacking){
+            
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) {
-        if(other.tag == "mineral"){
-            interactObj.Remove(other.gameObject);
-        }
-    }
-    
+
 
     //use item
     public int slotSelectNumber, pastSlotNumber;

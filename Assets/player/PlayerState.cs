@@ -7,12 +7,12 @@ using UnityEngine.Events;
 
 public class PlayerState : MonoBehaviour
 {   
-    public CamearControl CCtrl;
+    public CamearControl CCtrl; Interaction interaction;
     Rigidbody2D rigid;
     public Image hpBar; public Text hpText;
-    public GameObject WSCanvas; GameObject textObj;
+    public GameObject WSCanvas; GameObject textObj; public TextManager textManager;
  
-    public UnityEvent onPlayerDead;
+    public UnityEvent onPlayerDead; public List<Coroutine> deadStopCoroutines;
     public int maxHp, hp;
 
     public float respawnX, respawnY; public int mapCode0, mapCode1;
@@ -22,16 +22,19 @@ public class PlayerState : MonoBehaviour
     public bool stand;
     public bool stunState; float stunTime;
     public bool knockbackState;
-    public bool mining; public float miningPower;
+    public bool isInteractive; public float miningPower;
+    public bool isAttacking;
     
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
+        interaction = GetComponent<Interaction>();
         textObj = WSCanvas.transform.Find("Text").gameObject;
-
-        respawn();
+        textManager = WSCanvas.GetComponent<TextManager>();
+        deadStopCoroutines = new List<Coroutine>();
     }
     void Start()
     {
+        respawn();
     }
 
     void Update()
@@ -56,14 +59,17 @@ public class PlayerState : MonoBehaviour
         hpText.text = hp+"/"+maxHp;
 
         if(hp <= 0 ) {
+            deadStopCoroutine();
+            interaction.deadStopCoroutine();
             onPlayerDead.Invoke();
             respawn();
         }
-        if(damage > 0) StartCoroutine(damagedText((int)damage));   
+        else if(damage > 0) deadStopCoroutines.Add(StartCoroutine(damagedText((int)damage)));   
     }
     IEnumerator damagedText(int damage){
         GameObject text = Instantiate(textObj, transform.position, Quaternion.identity);
         text.transform.SetParent(WSCanvas.transform);
+        textManager.textList.Add(text);
 
         Vector2 dir = new Vector2(Random.Range(-0.5f, 0.5f), 1f).normalized;
         text.transform.Translate(dir);
@@ -77,6 +83,7 @@ public class PlayerState : MonoBehaviour
         text.GetComponent<Rigidbody2D>().AddForce(dir*10, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
+        textManager.textList.Remove(text);
         Destroy(text);
     }
 
@@ -86,8 +93,17 @@ public class PlayerState : MonoBehaviour
         damaged(0);
         stunState = false; stunTime = 0;
         knockbackState = false;
-        mining = false; miningPower = 10f;
+        isInteractive = false; miningPower = 10f;
+        isAttacking = false;
         CCtrl.PlayerSpawn(mapCode0, mapCode1, respawnX, respawnY);
+    }
+
+    void deadStopCoroutine(){
+        int count = deadStopCoroutines.Count;
+        for(int i = 0; i < count; i++){
+            StopCoroutine(deadStopCoroutines[0]);
+            deadStopCoroutines.RemoveAt(0);
+        }
     }
 
     public void stun(float t){
@@ -121,7 +137,8 @@ public class PlayerState : MonoBehaviour
     }
     public bool actionable(){
         if(stunState) return false;
-        if(mining) return false;
+        if(isInteractive) return false;
         return true;
     }
+
 }
