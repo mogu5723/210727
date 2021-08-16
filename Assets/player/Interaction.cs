@@ -9,12 +9,13 @@ public class Interaction : MonoBehaviour
     public InventoryManager invenManager;
     public GameObject WSCanvas; GameObject textObj; List<Coroutine> deadStopCoroutines;
 
-    Animator anim;
+    Animator anim; SpriteRenderer rend;
     PlayerState state;
     
     private void Awake() {
         anim = GetComponent<Animator>();
         state = GetComponent<PlayerState>();
+        rend = GetComponent<SpriteRenderer>();
         textObj = WSCanvas.transform.Find("Text").gameObject;
         deadStopCoroutines = new List<Coroutine>();
     }
@@ -27,7 +28,7 @@ public class Interaction : MonoBehaviour
     public List<GameObject> interactObj;
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "mineral"){
+        if(other.CompareTag("mineral")){
             interactObj.Add(other.gameObject);
         }
     }
@@ -56,10 +57,26 @@ public class Interaction : MonoBehaviour
     }
 
     public void Interact(){
-        if(Input.GetKeyDown(KeyCode.Space) && state.stand && state.actionable() && interactObj.Count > 0){
+        if(Input.GetKeyDown(KeyCode.Space) && state.stand && state.actionable() && !state.isAttacking && interactObj.Count > 0 ){
             GameObject obj = GetCloseObject();
 
             if(obj.name == "rock") StartCoroutine(mining(obj));
+        }
+    }
+
+    public void PickUp(){
+        if(Input.GetKeyDown(KeyCode.Z) && state.stand && state.actionable() && !state.isAttacking){
+            RaycastHit2D hit;
+            int raymask = 1;
+            hit = Physics2D.Raycast(transform.position+new Vector3(0, 0.2f, 0), new Vector2(rend.flipX ? -1 : 1, 0), 1f, raymask);
+
+            if(hit.collider != null){
+                if(hit.collider.name == "movableStone"){
+                    deadStopCoroutines.Add(StartCoroutine(textup("+1", Color.white, gameObject, 5)));
+                    invenManager.addItem(1, "null", 1, 1);
+                    Destroy(hit.collider.gameObject);
+                }
+            }
         }
     }
 

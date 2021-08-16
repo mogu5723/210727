@@ -20,6 +20,21 @@ TextureImporter:
   - first:
       213: -403862787636015564
     second: PlayerAttack_5
+  - first:
+      213: -7427724726082570653
+    second: PlayerAttack_6
+  - first:
+      213: -4933628155599994406
+    second: PlayerAttack_7
+  - first:
+      213: 2623847480074107330
+    second: PlayerAttack_8
+  - first:
+      213: 6567917769350235451
+    second: PlayerAttack_9
+  - first:
+      213: -6485401797827079071
+    second: PlayerAttack_10
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -124,8 +139,8 @@ TextureImporter:
       name: PlayerAttack_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 143
+        x: 64
+        y: 111
         width: 21
         height: 17
       alignment: 9
@@ -145,8 +160,8 @@ TextureImporter:
       name: PlayerAttack_1
       rect:
         serializedVersion: 2
-        x: 65
-        y: 143
+        x: 129
+        y: 111
         width: 47
         height: 17
       alignment: 9
@@ -166,8 +181,8 @@ TextureImporter:
       name: PlayerAttack_2
       rect:
         serializedVersion: 2
-        x: 129
-        y: 143
+        x: 193
+        y: 111
         width: 47
         height: 17
       alignment: 9
@@ -187,12 +202,12 @@ TextureImporter:
       name: PlayerAttack_3
       rect:
         serializedVersion: 2
-        x: 193
-        y: 143
-        width: 47
+        x: 1
+        y: 79
+        width: 39
         height: 17
       alignment: 9
-      pivot: {x: 0.17021276, y: 0.05882353}
+      pivot: {x: 0.20512821, y: 0.05882353}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -208,12 +223,12 @@ TextureImporter:
       name: PlayerAttack_4
       rect:
         serializedVersion: 2
-        x: 1
-        y: 111
-        width: 46
+        x: 65
+        y: 79
+        width: 22
         height: 16
       alignment: 9
-      pivot: {x: 0.17391305, y: 0.0625}
+      pivot: {x: 0.36363637, y: 0.0625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -229,7 +244,112 @@ TextureImporter:
       name: PlayerAttack_5
       rect:
         serializedVersion: 2
-        x: 64
+        x: 128
+        y: 79
+        width: 17
+        height: 17
+      alignment: 9
+      pivot: {x: 0.47058824, y: 0.05882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43ec4f43fe0356af0800000000000000
+      internalID: -403862787636015564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerAttack_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 143
+        width: 21
+        height: 17
+      alignment: 9
+      pivot: {x: 0.3809524, y: 0.05882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 366767427bb6be890800000000000000
+      internalID: -7427724726082570653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerAttack_7
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 143
+        width: 45
+        height: 17
+      alignment: 9
+      pivot: {x: 0.17777778, y: 0.05882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad1c89bf45b388bb0800000000000000
+      internalID: -4933628155599994406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerAttack_8
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 143
+        width: 47
+        height: 17
+      alignment: 9
+      pivot: {x: 0.17021276, y: 0.05882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c9fe92a167c96420800000000000000
+      internalID: 2623847480074107330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerAttack_9
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 143
+        width: 46
+        height: 16
+      alignment: 9
+      pivot: {x: 0.17391305, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b35c814b96ee52b50800000000000000
+      internalID: 6567917769350235451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerAttack_10
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 111
         width: 46
         height: 17
@@ -240,8 +360,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43ec4f43fe0356af0800000000000000
-      internalID: -403862787636015564
+      spriteID: 16456de0d693ff5a0800000000000000
+      internalID: -6485401797827079071
       vertices: []
       indices: 
       edges: []

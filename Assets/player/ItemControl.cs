@@ -7,6 +7,7 @@ public class ItemControl : MonoBehaviour
 {
     PlayerState state;
     PlayerControl pCtrl;
+    SpriteRenderer rend;
 
     public InventoryManager invenManager;
 
@@ -18,6 +19,7 @@ public class ItemControl : MonoBehaviour
     private void Awake() {
         state = GetComponent<PlayerState>();
         pCtrl = GetComponent<PlayerControl>();
+        rend = GetComponent<SpriteRenderer>();
         effectSystem = effectSystemObj.GetComponent<EffectSystem>();
 
         projectileCooldown = 1f;
@@ -33,7 +35,7 @@ public class ItemControl : MonoBehaviour
 
         GameObject itemObj;
     void active(){
-        if(!Input.GetKeyDown(KeyCode.X)) return;
+        if(!Input.GetKeyDown(KeyCode.X) || state.isAttacking) return;
 
         invenSlot = invenManager.quickslot[pCtrl.slotSelectNumber-1];
         if(invenSlot.count == 0) return;
@@ -48,9 +50,16 @@ public class ItemControl : MonoBehaviour
             int dir;
             if(transform.GetComponent<SpriteRenderer>().flipX) dir = -1;
             else dir = 1;
-            itemObj.transform.position += new Vector3(dir, 0.5f, 0);
+            itemObj.transform.position += new Vector3(0, 0.5f, 0);
             if(dir == -1) itemObj.GetComponent<SpriteRenderer>().flipX = true;
             itemObj.GetComponent<Rigidbody2D>().velocity = new Vector2(dir*12f, 0);
+        }else if(itemCode == 1 && state.actionable()){
+            invenManager.deleteItem(pCtrl.slotSelectNumber-1, 1);
+
+            GameObject mapobj = state.CCtrl.chapter[state.mapCode0].Map[state.mapCode1];
+            GameObject clone;
+            clone = Instantiate(itemObjList[itemCode], transform.position+new Vector3(rend.flipX ? -1f : 1f , 0.5f), Quaternion.identity, mapobj.transform);
+            clone.name = "movableStone";
         }
     }
 }

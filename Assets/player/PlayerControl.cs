@@ -13,7 +13,7 @@ public class PlayerControl : MonoBehaviour
     PlayerState state; Interaction interaction;
     public InventoryManager invenManager;
 
-    GameObject floor;
+    GameObject floor; GameObject Attack1Range;
 
     private void Awake() {
         rend = GetComponent<SpriteRenderer>();
@@ -23,6 +23,7 @@ public class PlayerControl : MonoBehaviour
         interaction = GetComponent<Interaction>();
 
         floor = transform.Find("floor").gameObject;
+        Attack1Range = transform.Find("attack1Range").gameObject;
 
         isJumping = false;
 
@@ -43,8 +44,8 @@ public class PlayerControl : MonoBehaviour
             if(Input.GetKey(KeyCode.RightArrow)) moveDirection++;
         }
 
-        if(moveDirection == 1) rend.flipX = false;
-        else if(moveDirection == -1) rend.flipX = true;
+        if(moveDirection == 1 && !state.isAttacking) rend.flipX = false;
+        else if(moveDirection == -1 && !state.isAttacking) rend.flipX = true;
         
         if(!state.stunState){
             rigid.velocity = new Vector2(moveDirection*state.speed, rigid.velocity.y);
@@ -54,7 +55,7 @@ public class PlayerControl : MonoBehaviour
                 rigid.velocity = new Vector2(-state.speed, rigid.velocity.y);
         }
 
-        if(!state.isInteractive){
+        if(!state.isInteractive && !state.isAttacking){
             if((moveDirection != 0 && state.stand) && rigid.velocity.y < 1) anim.SetInteger("animNumber", 1);
             else if(state.stand && rigid.velocity.y < 1) anim.SetInteger("animNumber", 0);
         }
@@ -69,15 +70,17 @@ public class PlayerControl : MonoBehaviour
         }
     }
     void JumpControl(){
+        if(!state.stand && !isJumping && !state.isAttacking){
+            anim.SetInteger("animNumber", 3);
+        }
         if(Input.GetKeyDown(KeyCode.C) && state.stand && state.actionable()){
             transform.Translate(new Vector3(0, 0.1f, 0));
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
-            anim.SetInteger("animNumber", 2);
-            anim.SetTrigger("change");
-            isJumping = true;
-        }
-        if(!state.stand && !isJumping){
-            anim.SetInteger("animNumber", 3);
+            if(!state.isAttacking){
+                anim.SetInteger("animNumber", 2);
+                anim.SetTrigger("change");
+                isJumping = true;
+            }
         }
     }
 
@@ -86,15 +89,27 @@ public class PlayerControl : MonoBehaviour
         MoveControl();
         JumpControl();
         interaction.Interact();
+        interaction.PickUp();
         slotSelect();
         AttackControl();
     }
 
     //attack
     void AttackControl(){
-        if(state.actionable() && Input.GetKeyDown(KeyCode.Z) && !state.isAttacking){
-            
+        if(state.actionable() && Input.GetKeyDown(KeyCode.A) && !state.isAttacking){
+            StartCoroutine(attack1());
         }
+    }
+    
+    IEnumerator attack1(){
+        state.isAttacking = true;
+        state.attackDir = rend.flipX ? -1 : 1;
+        anim.SetInteger("animNumber", 5);
+
+        Attack1Range.SetActive(true);
+        yield return new WaitForSeconds(0.4166f);
+        state.isAttacking = false;
+        anim.SetInteger("animNumber", 3);
     }
 
 

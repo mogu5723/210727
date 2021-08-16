@@ -29,7 +29,7 @@ public class PlayerFloor : MonoBehaviour
     }
         
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "block"){
+        if(other.CompareTag("block")){
             state.stand = true;
             if (fallDamage > 0){
                 state.damaged(fallDamage);
@@ -41,7 +41,7 @@ public class PlayerFloor : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        if(other.tag == "block"){
+        if(other.CompareTag("block")){
             state.stand = false;
         }
     }

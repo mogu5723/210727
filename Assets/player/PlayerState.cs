@@ -11,19 +11,19 @@ public class PlayerState : MonoBehaviour
     Rigidbody2D rigid;
     public Image hpBar; public Text hpText;
     public GameObject WSCanvas; GameObject textObj; public TextManager textManager;
- 
     public UnityEvent onPlayerDead; public List<Coroutine> deadStopCoroutines;
-    public int maxHp, hp;
 
-    public float respawnX, respawnY; public int mapCode0, mapCode1;
-
+    //스탯
+    public int maxHp, hp; 
     public float speed;
-
+    //상태
     public bool stand;
-    public bool stunState; float stunTime;
-    public bool knockbackState;
+    public bool stunState; float stunTime; public bool knockbackState;
     public bool isInteractive; public float miningPower;
-    public bool isAttacking;
+    public bool isAttacking; public int attackDir;
+    //스폰지점
+    public float respawnX, respawnY; public int mapCode0, mapCode1;
+    
     
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
