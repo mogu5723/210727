@@ -47,6 +47,15 @@ public class PlayerControl : MonoBehaviour
         if(moveDirection == 1 && !state.isAttacking) rend.flipX = false;
         else if(moveDirection == -1 && !state.isAttacking) rend.flipX = true;
         
+        StartCoroutine(Move_());
+
+        if(!state.isInteractive && !state.isAttacking){
+            if((moveDirection != 0 && state.stand) && rigid.velocity.y < 1) anim.SetInteger("animNumber", 1);
+            else if(state.stand && rigid.velocity.y < 1) anim.SetInteger("animNumber", 0);
+        }
+    }
+    IEnumerator Move_(){
+        yield return new WaitForFixedUpdate();
         if(!state.stunState){
             rigid.velocity = new Vector2(moveDirection*state.speed, rigid.velocity.y);
             if(rigid.velocity.x > state.speed)
@@ -54,20 +63,19 @@ public class PlayerControl : MonoBehaviour
             else if(rigid.velocity.x < -state.speed)
                 rigid.velocity = new Vector2(-state.speed, rigid.velocity.y);
         }
-
-        if(!state.isInteractive && !state.isAttacking){
-            if((moveDirection != 0 && state.stand) && rigid.velocity.y < 1) anim.SetInteger("animNumber", 1);
-            else if(state.stand && rigid.velocity.y < 1) anim.SetInteger("animNumber", 0);
-        }
     }
     bool isJumping;
-    void EndJumpMotion(){
-        isJumping = false;
-    }
-    void addJump(){
-        if(Input.GetKey(KeyCode.C)){
-            rigid.velocity += new Vector2(0, 3f);
+
+    IEnumerator addJump(){
+        float time = 0;
+
+        while(Input.GetKey(KeyCode.C) && time < 0.4f){
+            yield return null;
+            rigid.velocity += new Vector2(0, Time.deltaTime)*60f;
+            time += Time.deltaTime;
         }
+
+        isJumping = false;
     }
     void JumpControl(){
         if(!state.stand && !isJumping && !state.isAttacking){
@@ -76,6 +84,7 @@ public class PlayerControl : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.C) && state.stand && state.actionable()){
             transform.Translate(new Vector3(0, 0.1f, 0));
             rigid.velocity = new Vector2(rigid.velocity.x, 15f);
+            StartCoroutine(addJump());
             if(!state.isAttacking){
                 anim.SetInteger("animNumber", 2);
                 anim.SetTrigger("change");

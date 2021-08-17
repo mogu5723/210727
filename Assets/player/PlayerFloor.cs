@@ -9,7 +9,7 @@ public class PlayerFloor : MonoBehaviour
     Animator anim;
     PlayerState state;
 
-    float fallDamage;
+    float fallDamage; public int blockCount;
 
     private void Awake() {
         ctrl = transform.parent.GetComponent<PlayerControl>();
@@ -18,8 +18,14 @@ public class PlayerFloor : MonoBehaviour
         state = transform.parent.GetComponent<PlayerState>();
         
         state.stand = false;
-
+        
         fallDamage = 0;
+        blockCount = 0;
+    }
+
+    private void OnEnable() {
+        blockCount = 0;
+        state.stand = false;
     }
 
     private void FixedUpdate() {
@@ -30,6 +36,7 @@ public class PlayerFloor : MonoBehaviour
         
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("block")){
+            blockCount++;
             state.stand = true;
             if (fallDamage > 0){
                 state.damaged(fallDamage);
@@ -42,7 +49,9 @@ public class PlayerFloor : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other) {
         if(other.CompareTag("block")){
-            state.stand = false;
+            blockCount--;
+            if(blockCount == 0)
+                state.stand = false;
         }
     }
 }

@@ -118,7 +118,7 @@ public class MonsterState : MonoBehaviour
         }
 
         rigid.velocity = new Vector2(0, rigid.velocity.y);
-        rigid.AddForce(v.normalized * power, ForceMode2D.Impulse);
+        rigid.AddForce(v.normalized * power * 300f, ForceMode2D.Impulse);
         while(stunTime > 0){
             yield return null;
         }

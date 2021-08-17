@@ -10,13 +10,15 @@ public class MapArray{
 
 public class CamearControl : MonoBehaviour
 {
-    public GameObject player; public Transform target;
+    public GameObject player; public Transform target; PlayerState playerState;
     public float speed;
     public MapArray[] chapter; public MapControl mCtrl; public MapManager mapManager;
-    int[] mapCode = new int[2];
+    public int[] mapCode = new int[2];
     float height; float width;
    
     private void Awake() {
+        playerState = player.GetComponent<PlayerState>();
+
         speed = 3f;
         mapCode[0] = 0;
         mapCode[1] = 0;
@@ -55,6 +57,7 @@ public class CamearControl : MonoBehaviour
         target.position = new Vector3(x, y, 0);
         player.SetActive(true);
         transform.position = new Vector3(x, y, -10f);
+        
         fadeInCoroutine = StartCoroutine(FadeIn());
     }
 
