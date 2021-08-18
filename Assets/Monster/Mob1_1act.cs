@@ -42,7 +42,7 @@ public class Mob1_1act : MonoBehaviour
 
         state.hp = state.maxHp = 30;
         state.stunTime = 0;
-        state.deadState = false;
+        state.isDead = false;
         state.moveSpeed = 2;
         rend.enabled = true;
 
@@ -69,7 +69,7 @@ public class Mob1_1act : MonoBehaviour
         while(true){
             stateNumber = 1;
             for (int i = 0; i < 2; i++){    //오른쪽, 왼쪽 이동공간 탐색
-                movingTargetX = transform.position.x + Random.Range(0.5f, 1.5f) * dir;
+                movingTargetX = transform.position.x + Random.Range(0.5f, 1.0f) * dir;
                 movingDistanceX = Mathf.Abs(movingTargetX - transform.position.x);
 
                 raymask = 1 << 7;
@@ -97,7 +97,7 @@ public class Mob1_1act : MonoBehaviour
                 rigid.velocity = new Vector2(0, rigid.velocity.y);
 
                 yield return new WaitForSeconds(1f);
-                if(state.deadState) break;
+                if(state.isDead) break;
                 while(state.stunTime > 0 || stateNumber == 2) yield return null;
 
                 if(Random.Range(0f, 1f) > 0.5) dir = 1;
@@ -109,7 +109,7 @@ public class Mob1_1act : MonoBehaviour
                 rigid.velocity = new Vector2(dir * state.moveSpeed, rigid.velocity.y);
 
                 yield return new WaitForFixedUpdate();
-                if(state.deadState) break;
+                if(state.isDead) break;
                 if(state.stunTime > 0 || stateNumber == 2) break;
 
                 if (Mathf.Abs(rigid.velocity.x) < 0.05f){
@@ -117,11 +117,11 @@ public class Mob1_1act : MonoBehaviour
                     break;
                 }
             }
-            if(state.deadState) break;
+            if(state.isDead) break;
 
             while (state.stunTime > 0 || stateNumber == 2) yield return null;
 
-            if(Random.Range(0, 1f) < 0.1) dir *= -1;
+            if(Random.Range(0, 1f) < 0.05) dir *= -1;
         }
     }
 
@@ -141,7 +141,7 @@ public class Mob1_1act : MonoBehaviour
             rigid.velocity = new Vector2(0, rigid.velocity.y);
             
             yield return new WaitForSeconds(1f);
-            if(state.deadState) break;
+            if(state.isDead) break;
             GameObject attackObjClone = Instantiate(attackObj, transform.position, Quaternion.identity, effectSystemObj.transform);
             effectSystem.tempObjList.Add(attackObjClone);
             attackObjClone.SetActive(true);
@@ -157,7 +157,7 @@ public class Mob1_1act : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.CompareTag("Player") && !state.deadState){
+        if(other.CompareTag("Player") && !state.isDead){
             PState = other.gameObject.GetComponent<PlayerState>();
             PState.damaged(5f);
             PState.stun(0.3f);

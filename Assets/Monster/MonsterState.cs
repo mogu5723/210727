@@ -15,7 +15,7 @@ public class MonsterState : MonoBehaviour
     Image hpBar; public int hp, maxHp; 
     public float moveSpeed;
     public float stunTime;
-    public bool deadState;
+    public bool isDead;
 
 
     private void Awake() {
@@ -40,7 +40,7 @@ public class MonsterState : MonoBehaviour
     }
 
     public void damaged(float damage){
-        if(deadState) return;
+        if(isDead) return;
 
         hp -= (int)damage;
         
@@ -58,7 +58,7 @@ public class MonsterState : MonoBehaviour
 
     
     IEnumerator dead(){
-        deadState = true;
+        isDead = true;
 
         transform.Find("Canvas").Find("hpbar").gameObject.SetActive(false);
         col.enabled = false;

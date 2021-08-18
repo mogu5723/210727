@@ -42,6 +42,7 @@ public class PlayerFloor : MonoBehaviour
                 state.damaged(fallDamage);
                 state.stun(0.5f);
                 state.knockback(Vector3.zero, 0, 0);
+                rigid.velocity = new Vector2(rigid.velocity.x, 0f);
                 fallDamage = 0;
             }
         }
