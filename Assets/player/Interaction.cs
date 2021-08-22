@@ -30,6 +30,8 @@ public class Interaction : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("mineral")){
             interactObj.Add(other.gameObject);
+        }else if(other.CompareTag("interactableObjects")){
+            interactObj.Add(other.gameObject);
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
@@ -61,6 +63,7 @@ public class Interaction : MonoBehaviour
             GameObject obj = GetCloseObject();
 
             if(obj.name == "rock") StartCoroutine(mining(obj));
+            if(obj.name == "lever0") StartCoroutine(lever0Works(obj));
         }
     }
 
@@ -86,7 +89,7 @@ public class Interaction : MonoBehaviour
         obj.transform.Find("Canvas").Find("hpbar").gameObject.SetActive(true);
 
         Image hpbar = obj.transform.Find("Canvas").Find("hpbar").Find("bghp").Find("hp").GetComponent<Image>();
-        float maxHP = 10f; float hp = maxHP, playerHP = state.hp;
+        float maxHP = 10f; float hp = maxHP;
 
         while(Input.GetKey(KeyCode.Space)){
             hp -= state.miningPower * Time.deltaTime;
@@ -105,6 +108,33 @@ public class Interaction : MonoBehaviour
         obj.transform.Find("Canvas").Find("hpbar").gameObject.SetActive(false);
         state.isInteractive = false;
     }
+
+    public IEnumerator lever0Works(GameObject obj){
+        state.isInteractive = true;
+        anim.SetInteger("animNumber", 4);
+        obj.transform.Find("Canvas").Find("hpbar").gameObject.SetActive(true);
+
+        Image hpbar = obj.transform.Find("Canvas").Find("hpbar").Find("bghp").Find("hp").GetComponent<Image>();
+        float totalTime = 3f; float currTime = 0;
+
+        while(Input.GetKey(KeyCode.Space)){
+            currTime += Time.deltaTime;
+            if(currTime >= totalTime){
+                currTime = totalTime;
+                obj.GetComponent<lever0>().Work();
+                break;
+            }
+            hpbar.fillAmount = currTime/totalTime;
+            yield return null;
+
+            if(state.stunState) break;
+            if(state.knockbackState) break;
+        }
+
+        obj.transform.Find("Canvas").Find("hpbar").gameObject.SetActive(false);
+        state.isInteractive = false;
+    }
+
     IEnumerator textup(string str, Color color, GameObject obj, int size){
         Vector2 upPos;
         if(obj.GetComponent<BoxCollider2D>() != null){

@@ -8,6 +8,7 @@ public class DataSetting : MonoBehaviour
     public GameObject EffectSystem;
     public GameObject WSCanvas;
     public GameObject textObj;
+    public DataManagement dataManagement;
 
     void Start()
     {

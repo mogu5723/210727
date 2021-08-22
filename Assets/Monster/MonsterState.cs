@@ -14,7 +14,7 @@ public class MonsterState : MonoBehaviour
     public float spawnX, spawnY;
     Image hpBar; public int hp, maxHp; 
     public float moveSpeed;
-    public float stunTime;
+    public float stunTime; public bool ignoreKnockback;
     public bool isDead;
 
 
@@ -32,7 +32,7 @@ public class MonsterState : MonoBehaviour
     
     void Update()
     {
-        if(stunTime > 0){
+        if(stunTime > 0 && !ignoreKnockback){
             stunTime -= Time.deltaTime;
             if(stunTime <= 0) 
                 stunTime = 0;
@@ -102,11 +102,10 @@ public class MonsterState : MonoBehaviour
     }
 
     public void knockback(Vector3 v, float power, int mode){
+        if(ignoreKnockback) return;
         StartCoroutine(knockback_(v, power, mode));
     }
     IEnumerator knockback_(Vector3 v, float power, int mode){
-        
-
         if(mode == 1){
             v = transform.position - v;
         }else if(mode == 2){

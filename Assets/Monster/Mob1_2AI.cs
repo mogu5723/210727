@@ -38,8 +38,8 @@ public class Mob1_2AI : MonoBehaviour
 
         transform.position = new Vector3(state.spawnX, state.spawnY, 0);
 
-        state.hp = state.maxHp = 50;
-        state.stunTime = 0;
+        state.hp = state.maxHp = 70;
+        state.stunTime = 0; state.ignoreKnockback = false;
         state.isDead = false;
         state.moveSpeed = 3;
         rend.enabled = true;
@@ -72,7 +72,7 @@ public class Mob1_2AI : MonoBehaviour
 
         for (int i = 0; i < 2; i++){    //오른쪽, 왼쪽 이동공간 탐색
             if(IsMovable()) break;
-            else dir *= -1;
+            else dir =  i == 0 ? -dir : 0;
         }
 
         if (dir == 1) { rend.flipX = false; anim.SetInteger("animNumber", 1); }
@@ -107,7 +107,7 @@ public class Mob1_2AI : MonoBehaviour
         }
         while (state.stunTime > 0) yield return null;
 
-        if (PlayerCheck(5f)) {
+        if (PlayerCheck(8f)) {
             attackCoroutine = StartCoroutine(attack0());
         }else moveCoroutine = StartCoroutine(move0());
     }
@@ -116,17 +116,29 @@ public class Mob1_2AI : MonoBehaviour
     }
 
     IEnumerator attack0(){
+        rend.flipX = (dir == 1 ? false : true);
+        anim.SetInteger("animNumber", 0);
+        yield return new WaitForSeconds(0.5f);
+
         anim.SetInteger("animNumber", 2);
         state.moveSpeed = 8;
         power = 15f;
+        state.ignoreKnockback = true;
 
         while(IsMovable()){
-            rigid.velocity = new Vector2(dir * state.moveSpeed, rigid.velocity.y);
-            yield return new WaitForFixedUpdate();
-            if (Mathf.Abs(rigid.velocity.x) < state.moveSpeed*0.1f){
-                break;
+            while (transform.position.x * dir < movingTargetX * dir){  
+                rigid.velocity = new Vector2(dir * state.moveSpeed, rigid.velocity.y);
+
+                yield return new WaitForFixedUpdate();
+
+                if (Mathf.Abs(rigid.velocity.x) < 0.05f) break;
             }
+            if (Mathf.Abs(rigid.velocity.x) < 0.05f) break;
         }
+        anim.SetInteger("animNumber", 0);
+        rigid.velocity = new Vector2(0, rigid.velocity.y);
+        power = 10f;
+        state.ignoreKnockback = false;
 
         yield return new WaitForSeconds(2f);
 
@@ -138,7 +150,7 @@ public class Mob1_2AI : MonoBehaviour
             PState = other.gameObject.GetComponent<PlayerState>();
             PState.damaged(power);
             PState.stun(0.3f);
-            PState.knockback(transform.position, 10f, 3);
+            PState.knockback(transform.position, power, 3);
         }
     }
 

@@ -14,6 +14,9 @@ TextureImporter:
   - first:
       213: 8410894248705696185
     second: puzzle_3
+  - first:
+      213: 8500952370780790516
+    second: puzzle_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -194,6 +197,27 @@ TextureImporter:
       bones: []
       spriteID: 9b1aa71a1cf79b470800000000000000
       internalID: 8410894248705696185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puzzle_4
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fe57e8242379f570800000000000000
+      internalID: 8500952370780790516
       vertices: []
       indices: 
       edges: []

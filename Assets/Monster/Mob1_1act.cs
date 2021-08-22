@@ -41,10 +41,11 @@ public class Mob1_1act : MonoBehaviour
         transform.position = new Vector3(state.spawnX, state.spawnY, 0);
 
         state.hp = state.maxHp = 30;
-        state.stunTime = 0;
+        state.stunTime = 0; state.ignoreKnockback = false;
         state.isDead = false;
         state.moveSpeed = 2;
         rend.enabled = true;
+        dir = Random.Range(0f, 1f) > 0.5 ? 1 : -1; 
 
         moveCoroutine = StartCoroutine(move0());
         attackCoroutine = StartCoroutine(attack0());

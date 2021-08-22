@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 public class PlayerState : MonoBehaviour
 {   
+    public GameObject gameDataObj; DataManagement dataManagement; GameData gameData;
     public CamearControl CCtrl; Interaction interaction;
     Rigidbody2D rigid;
     public Image hpBar; public Text hpText;
@@ -31,10 +32,12 @@ public class PlayerState : MonoBehaviour
         textObj = WSCanvas.transform.Find("Text").gameObject;
         textManager = WSCanvas.GetComponent<TextManager>();
         deadStopCoroutines = new List<Coroutine>();
+        dataManagement = gameDataObj.GetComponent<DataManagement>();
+        gameData = dataManagement._gameData;
     }
     void Start()
     {
-        respawn();
+        
     }
 
     void Update()
@@ -45,6 +48,12 @@ public class PlayerState : MonoBehaviour
                 stunTime = 0;
                 stunState = false;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.O)){
+            dataManagement.SaveGameData();
+        }else if(Input.GetKeyDown(KeyCode.P)){
+            dataManagement.LoadGameData();
         }
     }
 
@@ -87,7 +96,7 @@ public class PlayerState : MonoBehaviour
         Destroy(text);
     }
 
-    void respawn(){
+    public void respawn(){
         hp = maxHp = 50;
         speed = 5.5f;
         damaged(0);
@@ -95,15 +104,9 @@ public class PlayerState : MonoBehaviour
         knockbackState = false;
         isInteractive = false; miningPower = 10f;
         isAttacking = false;
-        CCtrl.PlayerSpawn(mapCode0, mapCode1, respawnX, respawnY);
-    }
 
-    void deadStopCoroutine(){
-        int count = deadStopCoroutines.Count;
-        for(int i = 0; i < count; i++){
-            StopCoroutine(deadStopCoroutines[0]);
-            deadStopCoroutines.RemoveAt(0);
-        }
+        gameData = dataManagement._gameData;
+        CCtrl.PlayerSpawn(gameData.mapCode0, gameData.mapCode1, gameData.spawnX, gameData.spawnY);
     }
 
     public void stun(float t){
@@ -140,5 +143,11 @@ public class PlayerState : MonoBehaviour
         if(isInteractive) return false;
         return true;
     }
-
+    void deadStopCoroutine(){
+        int count = deadStopCoroutines.Count;
+        for(int i = 0; i < count; i++){
+            StopCoroutine(deadStopCoroutines[0]);
+            deadStopCoroutines.RemoveAt(0);
+        }
+    }
 }
