@@ -35,6 +35,9 @@ public class PlayerState : MonoBehaviour
         dataManagement = gameDataObj.GetComponent<DataManagement>();
         gameData = dataManagement._gameData;
     }
+    private void OnEnable() {
+        isAttacking = false;
+    }
     void Start()
     {
         
@@ -105,7 +108,7 @@ public class PlayerState : MonoBehaviour
         isInteractive = false; miningPower = 10f;
         isAttacking = false;
 
-        gameData = dataManagement._gameData;
+        gameData = dataManagement.gameData;
         CCtrl.PlayerSpawn(gameData.mapCode0, gameData.mapCode1, gameData.spawnX, gameData.spawnY);
     }
 
