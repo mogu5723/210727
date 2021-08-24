@@ -37,7 +37,7 @@ public class ItemControl : MonoBehaviour
     void active(){
         if(!Input.GetKeyDown(KeyCode.X) || state.isAttacking) return;
 
-        invenSlot = invenManager.quickslot[pCtrl.slotSelectNumber-1];
+        invenSlot = invenManager.inven[pCtrl.slotSelectNumber-1];
         if(invenSlot.count == 0) return;
         itemCode = invenSlot.itemCode;
 

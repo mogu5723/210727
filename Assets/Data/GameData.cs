@@ -11,4 +11,6 @@ public class GameData
     public float spawnX, spawnY;
 
     public int[] objData;
+
+    public int invenCount; public int[] invenItemCode; public int[] invenItemCount;
 }

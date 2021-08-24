@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DataManagement : MonoBehaviour
 {
     public PlayerState playerState;
+    public InventoryManager invenManager; public GameObject inventoryObj;
 
     static GameObject _container;
     static GameObject Container{
@@ -29,6 +31,10 @@ public class DataManagement : MonoBehaviour
     public string DataResetFIleName = "121220812.json";
     public string GameDataFileName = "21412812Data.json";
 
+    private void Start() {
+        
+    }
+
     public GameData _gameData;
     public GameData gameData{
         get{
@@ -38,15 +44,6 @@ public class DataManagement : MonoBehaviour
             }
             return _gameData;
         }
-    }
-
-    private void Start(){
-        LoadGameData();
-        SaveGameData();
-    }
-
-    private void Update() {
-    
     }
 
     public void LoadGameData(){
@@ -64,12 +61,22 @@ public class DataManagement : MonoBehaviour
             _gameData.spawnY = -1f;
         }
 
+        invenManager.invenLoad();
         playerState.respawn();
     }
 
     public void SaveGameData(){
         _gameData.mapCode0 = playerState.CCtrl.mapCode[0]; _gameData.mapCode1 = playerState.CCtrl.mapCode[1];
         _gameData.spawnX = playerState.transform.position.x; _gameData.spawnY = playerState.transform.position.y;
+
+        gameData.invenCount = invenManager.inven.Count;
+        gameData.invenItemCode = new int[gameData.invenCount];
+        gameData.invenItemCount = new int[gameData.invenCount];
+        int i = 0;
+        foreach(Inventory slot in invenManager.inven){
+            gameData.invenItemCode[i] = slot.itemCode;
+            gameData.invenItemCount[i++] = slot.count;
+        }
 
         string ToJsonData = JsonUtility.ToJson(gameData);
         string filePath = Application.persistentDataPath + GameDataFileName;

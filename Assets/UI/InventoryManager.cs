@@ -15,32 +15,28 @@ public class Inventory
 }
 public class InventoryManager : MonoBehaviour
 {
-    List<Inventory> inven;
-    public Inventory[] quickslot;
+    public DataManagement dataManagement;
+    public List<Inventory> inven;
     public Sprite[] itemSprite;
     //int invenSize;
 
     private void Awake() {
         //invenSize = 20;
         inven = new List<Inventory>();
-        quickslot = new Inventory[5];
-
-        for(int i = 1; i <= 5; i++){
-            quickslot[i-1] = new Inventory();
-            quickslot[i-1].imageObj = transform.Find("quickslot"+i).gameObject;
-            quickslot[i-1].bgImage = quickslot[i-1].imageObj.transform.Find("bgImage").gameObject.GetComponent<Image>();
-            quickslot[i-1].image = quickslot[i-1].imageObj.transform.Find("image").gameObject.GetComponent<Image>();
-            quickslot[i-1].cooldownMask = quickslot[i-1].imageObj.transform.Find("cooldownMask").gameObject.GetComponent<Image>();
-            quickslot[i-1].textGUI = quickslot[i-1].imageObj.transform.Find("Text").gameObject.GetComponent<Text>();
-            quickslot[i-1].count = 0;
-            quickslot[i-1].cooldown = 0;
-            quickslot[i-1].image.enabled = false;
-            quickslot[i-1].textGUI.enabled = false;
-
-            inven.Add(quickslot[i-1]);
-        }
 
         //for(int i = 0; i < invenSize; i++) inven.Add(createEmptyInven());
+        for (int i = 0; i < 5; i++) inven.Add(new Inventory());
+        for (int i = 1; i <= 5; i++){
+            inven[i - 1].imageObj = transform.Find("quickslot" + i).gameObject;
+            inven[i - 1].bgImage = inven[i - 1].imageObj.transform.Find("bgImage").gameObject.GetComponent<Image>();
+            inven[i - 1].image = inven[i - 1].imageObj.transform.Find("image").gameObject.GetComponent<Image>();
+            inven[i - 1].cooldownMask = inven[i - 1].imageObj.transform.Find("cooldownMask").gameObject.GetComponent<Image>();
+            inven[i - 1].textGUI = inven[i - 1].imageObj.transform.Find("Text").gameObject.GetComponent<Text>();
+            inven[i - 1].count = 0;
+            inven[i - 1].cooldown = 0;
+            inven[i - 1].image.enabled = false;
+            inven[i - 1].textGUI.enabled = false;
+        }
     }
 
     private void Start() {
@@ -120,6 +116,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void invenLoad(){
+        int invenCount = dataManagement.gameData.invenCount;
+        int i;
+        for(i = 5; i < invenCount; i++) inven.Add(new Inventory()); //퀵슬롯 외의 슬롯 미구현
+        
+        i = 0;
+        foreach(Inventory slot in inven){
+            slot.itemCode = dataManagement.gameData.invenItemCode[i];
+            slot.count = dataManagement.gameData.invenItemCount[i++];
+
+            if(slot.count > 0){
+                slot.image.sprite = itemSprite[slot.itemCode]; slot.image.enabled = true;
+                slot.textGUI.text = "" + slot.count; slot.textGUI.enabled = true;
+            }else{
+                slot.image.enabled = false;
+                slot.textGUI.enabled = false;
+            }
+        }
+    }
     Inventory createEmptyInven(){
         Inventory newInven = new Inventory();
         newInven.count = 0;

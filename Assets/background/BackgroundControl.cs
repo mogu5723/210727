@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class BackgroundControl : MonoBehaviour
 {
-    Transform cameraTransform;
+    public Transform cameraTransform;
     float posX;
 
     private void Awake() {
-        cameraTransform = transform.parent;
-        
         posX = 0f;
     }
     void Start()
@@ -25,11 +23,11 @@ public class BackgroundControl : MonoBehaviour
     private void LateUpdate() {
         posX = cameraTransform.position.x*0.8f;
 
-        while(cameraTransform.position.x - posX > 8)
-            posX -= 16;
+        while(cameraTransform.position.x - posX > 16)
+            posX += 32;
         
-        while(cameraTransform.position.x - posX < -8) 
-            posX += 16;
+        while(cameraTransform.position.x - posX < -16) 
+            posX -= 32;
 
         transform.position = new Vector3(posX, cameraTransform.position.y, 10f);
     }

@@ -37,7 +37,13 @@ public class Interaction : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other) {
         if(other.tag == "mineral"){
             interactObj.Remove(other.gameObject);
+        }else if(other.CompareTag("interactableObjects")){
+            interactObj.Add(other.gameObject);
         }
+    }
+
+    public void clearInteractObj(){
+        interactObj.Clear();
     }
 
     GameObject GetCloseObject(){

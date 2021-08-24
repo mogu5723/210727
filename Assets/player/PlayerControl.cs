@@ -70,7 +70,8 @@ public class PlayerControl : MonoBehaviour
         float time = 0;
 
         while(Input.GetKey(KeyCode.C) && time < 0.4f){
-            yield return null;
+            yield return new WaitForFixedUpdate();
+            if(rigid.velocity.y < 5) break;
             rigid.velocity += new Vector2(0, Time.deltaTime)*60f;
             time += Time.deltaTime;
         }
@@ -101,6 +102,10 @@ public class PlayerControl : MonoBehaviour
         interaction.PickUp();
         slotSelect();
         AttackControl();
+    }
+
+    private void FixedUpdate() {
+        rigid.WakeUp();
     }
 
     //attack
@@ -134,7 +139,7 @@ public class PlayerControl : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Alpha5)) slotSelectNumber = 5;
         else return;
 
-        invenManager.quickslot[pastSlotNumber-1].bgImage.color = new Color(1f, 1f, 1f, 80/256f);
-        invenManager.quickslot[slotSelectNumber-1].bgImage.color = new Color(1f, 1f, 1f, 160/256f);
+        invenManager.inven[pastSlotNumber-1].bgImage.color = new Color(1f, 1f, 1f, 80/256f);
+        invenManager.inven[slotSelectNumber-1].bgImage.color = new Color(1f, 1f, 1f, 160/256f);
     }
 }

@@ -19,7 +19,7 @@ public class PlayerState : MonoBehaviour
     public float speed;
     //상태
     public bool stand;
-    public bool stunState; float stunTime; public bool knockbackState;
+    public bool stunState; float stunTime; public bool knockbackState; bool isRespawning;
     public bool isInteractive; public float miningPower;
     public bool isAttacking; public int attackDir;
     //스폰지점
@@ -40,7 +40,10 @@ public class PlayerState : MonoBehaviour
     }
     void Start()
     {
-        
+        //로드안한 게임 시작
+        dataManagement.gameData.mapCode0 = 0; dataManagement.gameData.mapCode1 = 0;
+        dataManagement.gameData.spawnX = -34.5f; dataManagement.gameData.spawnY = -1f;
+        respawn();
     }
 
     void Update()
@@ -71,52 +74,41 @@ public class PlayerState : MonoBehaviour
         hpText.text = hp+"/"+maxHp;
 
         if(hp <= 0 ) {
-            deadStopCoroutine();
-            interaction.deadStopCoroutine();
             onPlayerDead.Invoke();
-            respawn();
+            dataManagement.LoadGameData();
         }
         else if(damage > 0) deadStopCoroutines.Add(StartCoroutine(damagedText((int)damage)));   
     }
-    IEnumerator damagedText(int damage){
-        GameObject text = Instantiate(textObj, transform.position, Quaternion.identity);
-        text.transform.SetParent(WSCanvas.transform);
-        textManager.textList.Add(text);
-
-        Vector2 dir = new Vector2(Random.Range(-0.5f, 0.5f), 1f).normalized;
-        text.transform.Translate(dir);
-        text.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
-        text.GetComponent<Rigidbody2D>().gravityScale = 4;
-        text.GetComponent<Text>().text = "-"+damage;
-        text.transform.localScale = new Vector3(1f,1f,1f);
-        text.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-
-        text.SetActive(true);
-        text.GetComponent<Rigidbody2D>().AddForce(dir*10, ForceMode2D.Impulse);
-
-        yield return new WaitForSeconds(0.5f);
-        textManager.textList.Remove(text);
-        Destroy(text);
-    }
 
     public void respawn(){
+        deadStopCoroutine();
+        interaction.deadStopCoroutine();
         hp = maxHp = 50;
         speed = 5.5f;
         damaged(0);
-        stunState = false; stunTime = 0;
-        knockbackState = false;
+        stunState = true; stunTime = 1f;
+        knockbackState = false; isRespawning = true;
         isInteractive = false; miningPower = 10f;
         isAttacking = false;
 
         gameData = dataManagement.gameData;
         CCtrl.PlayerSpawn(gameData.mapCode0, gameData.mapCode1, gameData.spawnX, gameData.spawnY);
+        deadStopCoroutines.Add(StartCoroutine(respawn_()));
     }
 
+    IEnumerator respawn_(){
+        yield return new WaitForSeconds(1f);
+        isRespawning = false;
+    }
+    
+
     public void stun(float t){
+        if(isRespawning) return;
         stunTime += t;
         stunState = true;
     }
     public void knockback(Vector3 v, float power, int mode){
+        if(isRespawning) return;
         StartCoroutine(knockback_(v, power, mode));
     }
     IEnumerator knockback_(Vector3 v, float power, int mode){
@@ -152,5 +144,26 @@ public class PlayerState : MonoBehaviour
             StopCoroutine(deadStopCoroutines[0]);
             deadStopCoroutines.RemoveAt(0);
         }
+    }
+
+    IEnumerator damagedText(int damage){
+        GameObject text = Instantiate(textObj, transform.position, Quaternion.identity);
+        text.transform.SetParent(WSCanvas.transform);
+        textManager.textList.Add(text);
+
+        Vector2 dir = new Vector2(Random.Range(-0.5f, 0.5f), 1f).normalized;
+        text.transform.Translate(dir);
+        text.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+        text.GetComponent<Rigidbody2D>().gravityScale = 4;
+        text.GetComponent<Text>().text = "-"+damage;
+        text.transform.localScale = new Vector3(1f,1f,1f);
+        text.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+        text.SetActive(true);
+        text.GetComponent<Rigidbody2D>().AddForce(dir*10, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(0.5f);
+        textManager.textList.Remove(text);
+        Destroy(text);
     }
 }
