@@ -26,6 +26,7 @@ public class Mob1_1act : MonoBehaviour
         effectSystemObj = transform.parent.parent.GetComponent<DataSetting>().EffectSystem;
         effectSystem = effectSystemObj.GetComponent<EffectSystem>();
         attackObj = transform.Find("Mob1_1Attack0").gameObject;
+        PState = transform.parent.parent.GetComponent<DataSetting>().playerState;
 
         state.spawnX = transform.position.x; state.spawnY = transform.position.y;
     }
@@ -46,6 +47,7 @@ public class Mob1_1act : MonoBehaviour
         state.moveSpeed = 2;
         rend.enabled = true;
         dir = Random.Range(0f, 1f) > 0.5 ? 1 : -1; 
+        state.minDropCoin = 2; state.maxDropCoin = 3;
 
         moveCoroutine = StartCoroutine(move0());
         attackCoroutine = StartCoroutine(attack0());
@@ -157,12 +159,11 @@ public class Mob1_1act : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerStay2D(Collider2D other) {
         if(other.CompareTag("Player") && !state.isDead){
-            PState = other.gameObject.GetComponent<PlayerState>();
-            PState.damaged(5f);
             PState.stun(0.3f);
-            PState.knockback(transform.position, 10f, 3);
+            PState.knockback(transform.position, 5f, 1);
+            PState.damaged(5f);
         }
     }
 }

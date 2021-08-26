@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class DataManagement : MonoBehaviour
 {
     public PlayerState playerState;
+    public DropSystem dropSystem;
     public InventoryManager invenManager; public GameObject inventoryObj;
 
     static GameObject _container;
@@ -61,6 +62,7 @@ public class DataManagement : MonoBehaviour
             _gameData.spawnY = -1f;
         }
 
+        dropSystem.getGold(0);
         invenManager.invenLoad();
         playerState.respawn();
     }

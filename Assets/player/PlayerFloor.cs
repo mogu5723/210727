@@ -39,9 +39,9 @@ public class PlayerFloor : MonoBehaviour
             blockCount++;
             state.stand = true;
             if (fallDamage > 0){
-                state.damaged(fallDamage);
                 state.stun(0.5f);
-                state.knockback(Vector3.zero, 0, 0);
+                state.knockback(Vector3.zero, 0, 4);
+                state.damaged(fallDamage);
                 rigid.velocity = new Vector2(rigid.velocity.x, 0f);
                 fallDamage = 0;
             }

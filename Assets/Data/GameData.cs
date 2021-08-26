@@ -13,4 +13,6 @@ public class GameData
     public int[] objData;
 
     public int invenCount; public int[] invenItemCode; public int[] invenItemCount;
+
+    public int goldAmount;
 }

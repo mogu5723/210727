@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: 8500952370780790516
     second: puzzle_4
+  - first:
+      213: -6226498286090505678
+    second: puzzle_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -122,7 +125,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
+        y: 80
         width: 10
         height: 48
       alignment: 0
@@ -143,7 +146,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 12
-        y: 48
+        y: 112
         width: 16
         height: 16
       alignment: 0
@@ -164,7 +167,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 48
+        y: 112
         width: 16
         height: 3
       alignment: 9
@@ -185,7 +188,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 58
+        y: 122
         width: 16
         height: 2
       alignment: 9
@@ -206,11 +209,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 32
+        y: 96
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -218,6 +221,27 @@ TextureImporter:
       bones: []
       spriteID: 4fe57e8242379f570800000000000000
       internalID: 8500952370780790516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puzzle_5
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 96
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2323ff65cc80799a0800000000000000
+      internalID: -6226498286090505678
       vertices: []
       indices: 
       edges: []

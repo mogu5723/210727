@@ -72,7 +72,7 @@ public class PlayerControl : MonoBehaviour
         while(Input.GetKey(KeyCode.C) && time < 0.4f){
             yield return new WaitForFixedUpdate();
             if(rigid.velocity.y < 5) break;
-            rigid.velocity += new Vector2(0, Time.deltaTime)*60f;
+            rigid.velocity += new Vector2(0, Time.deltaTime)*65f;
             time += Time.deltaTime;
         }
 
@@ -121,7 +121,7 @@ public class PlayerControl : MonoBehaviour
         anim.SetInteger("animNumber", 5);
 
         Attack1Range.SetActive(true);
-        yield return new WaitForSeconds(0.4166f);
+        yield return new WaitForSeconds(0.29f);
         state.isAttacking = false;
         anim.SetInteger("animNumber", 3);
     }

@@ -24,6 +24,7 @@ public class Mob1_2AI : MonoBehaviour
 
         effectSystemObj = transform.parent.parent.GetComponent<DataSetting>().EffectSystem;
         effectSystem = effectSystemObj.GetComponent<EffectSystem>();
+        PState = transform.parent.parent.GetComponent<DataSetting>().playerState;
 
         state.spawnX = transform.position.x; state.spawnY = transform.position.y;
     }
@@ -44,6 +45,7 @@ public class Mob1_2AI : MonoBehaviour
         state.moveSpeed = 3;
         rend.enabled = true;
         dir = Random.Range(0f, 1f) > 0.5 ? 1 : -1; 
+        state.minDropCoin = 5; state.maxDropCoin = 7;
 
         //개인 세팅
         moveCoroutine = StartCoroutine(move0());
@@ -137,17 +139,19 @@ public class Mob1_2AI : MonoBehaviour
         power = 10f;
         state.ignoreKnockback = false;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         moveCoroutine = StartCoroutine(move0());
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerStay2D(Collider2D other) {
         if(other.CompareTag("Player") && !state.isDead){
-            PState = other.gameObject.GetComponent<PlayerState>();
-            PState.damaged(power);
             PState.stun(0.3f);
-            PState.knockback(transform.position, power, 3);
+            if(power == 10)
+                PState.knockback(transform.position, 5, 1);
+            else
+                PState.knockback(rigid.velocity, 10, 2);
+            PState.damaged(power);
         }
     }
 

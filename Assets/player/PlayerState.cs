@@ -7,9 +7,10 @@ using UnityEngine.Events;
 
 public class PlayerState : MonoBehaviour
 {   
-    public GameObject gameDataObj; DataManagement dataManagement; GameData gameData;
+    //관련 컴포넌트, 오브젝트 등
+    public GameObject gameDataObj; public DataManagement dataManagement; GameData gameData;
     public CamearControl CCtrl; Interaction interaction;
-    Rigidbody2D rigid;
+    Rigidbody2D rigid; SpriteRenderer rend;
     public Image hpBar; public Text hpText;
     public GameObject WSCanvas; GameObject textObj; public TextManager textManager;
     public UnityEvent onPlayerDead; public List<Coroutine> deadStopCoroutines;
@@ -22,12 +23,14 @@ public class PlayerState : MonoBehaviour
     public bool stunState; float stunTime; public bool knockbackState; bool isRespawning;
     public bool isInteractive; public float miningPower;
     public bool isAttacking; public int attackDir;
+    public float invincibleTime;
     //스폰지점
     public float respawnX, respawnY; public int mapCode0, mapCode1;
     
     
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
+        rend = GetComponent<SpriteRenderer>();
         interaction = GetComponent<Interaction>();
         textObj = WSCanvas.transform.Find("Text").gameObject;
         textManager = WSCanvas.GetComponent<TextManager>();
@@ -37,6 +40,8 @@ public class PlayerState : MonoBehaviour
     }
     private void OnEnable() {
         isAttacking = false;
+        invincibleTime = 0;
+        rend.color = Color.white;
     }
     void Start()
     {
@@ -46,6 +51,8 @@ public class PlayerState : MonoBehaviour
         respawn();
     }
 
+    Coroutine blinkCoroutine;
+
     void Update()
     {
         if(stunTime > 0){
@@ -53,6 +60,14 @@ public class PlayerState : MonoBehaviour
             if(stunTime <= 0) {
                 stunTime = 0;
                 stunState = false;
+            }
+        }
+        if(invincibleTime > 0){
+            invincibleTime -= Time.deltaTime;
+            if(invincibleTime <= 0){
+                invincibleTime = 0;
+                StopCoroutine(blinkCoroutine);
+                rend.color = new Color(1,1,1,1);
             }
         }
 
@@ -64,7 +79,12 @@ public class PlayerState : MonoBehaviour
     }
 
     public void damaged(float damage){
+        if(invincibleTime > 0) return;
+
         hp -= (int)damage;
+        invincibleTime = 1f;
+        blinkCoroutine = StartCoroutine(blink0());
+        
         
         if(hp < 0) {
             damage += hp;
@@ -74,10 +94,20 @@ public class PlayerState : MonoBehaviour
         hpText.text = hp+"/"+maxHp;
 
         if(hp <= 0 ) {
+            invincibleTime = 0f;
             onPlayerDead.Invoke();
             dataManagement.LoadGameData();
         }
         else if(damage > 0) deadStopCoroutines.Add(StartCoroutine(damagedText((int)damage)));   
+    }
+
+    IEnumerator blink0(){
+        while(invincibleTime > 0){
+            rend.color = new Color(1,1,1,0.5f);
+            yield return new WaitForSeconds(0.125f);
+            rend.color = new Color(1,1,1,1f);
+            yield return new WaitForSeconds(0.125f);
+        }
     }
 
     public void respawn(){
@@ -104,11 +134,15 @@ public class PlayerState : MonoBehaviour
 
     public void stun(float t){
         if(isRespawning) return;
+        if(invincibleTime > 0) return;
+
         stunTime += t;
         stunState = true;
     }
     public void knockback(Vector3 v, float power, int mode){
         if(isRespawning) return;
+        if(invincibleTime > 0) return;
+
         StartCoroutine(knockback_(v, power, mode));
     }
     IEnumerator knockback_(Vector3 v, float power, int mode){
@@ -116,17 +150,18 @@ public class PlayerState : MonoBehaviour
 
         if(mode == 1){
             v = transform.position - v;
-        }else if(mode == 2){
+        }else if(mode == 2 || mode == 4){
             if(v.x > 0) v = new Vector3(1f, 0, 0);
             else v = new Vector3(-1f, 0, 0);
-        }else if(mode == 3){
+        }else if(mode == 3 || mode == 5){
             if(transform.position.x - v.x > 0) v = new Vector3(1f, 0, 0);
             else v = new Vector3(-1f, 0, 0);
         }
 
-        yield return null;
-        rigid.velocity = new Vector2(0, rigid.velocity.y);
-        rigid.AddForce(v.normalized * power, ForceMode2D.Impulse);
+        yield return new WaitForFixedUpdate();
+        rigid.velocity = v.normalized*power;
+        if(mode < 4) rigid.velocity += new Vector2(0, 10f);
+    
         while(stunState){
             yield return null;
         }
@@ -153,7 +188,6 @@ public class PlayerState : MonoBehaviour
 
         Vector2 dir = new Vector2(Random.Range(-0.5f, 0.5f), 1f).normalized;
         text.transform.Translate(dir);
-        text.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
         text.GetComponent<Rigidbody2D>().gravityScale = 4;
         text.GetComponent<Text>().text = "-"+damage;
         text.transform.localScale = new Vector3(1f,1f,1f);

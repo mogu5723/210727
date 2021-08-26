@@ -6,31 +6,49 @@ using UnityEngine.Events;
 
 public class MonsterState : MonoBehaviour
 {
-    TextManager textManager; GameObject WSCanvas, textObj;
+    //관련 오브젝트 or 컴포넌트
+    public DataSetting dataSetting; TextManager textManager; GameObject WSCanvas, textObj;
+    GameObject effectObj; EffectSystem effectSystem; DropSystem dropSystem;
 
-    Rigidbody2D rigid; Collider2D col;
-    SpriteRenderer rend; 
+    Rigidbody2D rigid; Collider2D col; 
+    SpriteRenderer rend; Material matWhite, matDefault;
 
+    //스텟
     public float spawnX, spawnY;
     Image hpBar; public int hp, maxHp; 
     public float moveSpeed;
+    public float collisionDamage;
+    //상태
     public float stunTime; public bool ignoreKnockback;
     public bool isDead;
 
+    public int minDropCoin, maxDropCoin;
+
 
     private void Awake() {
-        WSCanvas = transform.parent.parent.GetComponent<DataSetting>().WSCanvas;
-        textObj = transform.parent.parent.GetComponent<DataSetting>().textObj;
+        dataSetting = transform.parent.parent.GetComponent<DataSetting>();
+        WSCanvas = dataSetting.WSCanvas;
+        textObj = dataSetting.textObj;
         textManager = WSCanvas.GetComponent<TextManager>();
+        effectObj = dataSetting.EffectSystem;
+        effectSystem = effectObj.GetComponent<EffectSystem>();
+        dropSystem = effectObj.GetComponent<DropSystem>();
         
         rigid = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         rend = GetComponent<SpriteRenderer>();
+        matDefault = rend.material;
+        matWhite = dataSetting.matWhite;
 
         hpBar = transform.Find("Canvas").Find("hpbar").Find("bghp").Find("hp").GetComponent<Image>();
+        minDropCoin = 3; maxDropCoin = 9;
     }
 
-    
+    private void OnEnable() {
+        rend.material = matDefault;
+        rend.color = new Color(1,1,1,1);
+    }
+
     void Update()
     {
         if(stunTime > 0 && !ignoreKnockback){
@@ -44,6 +62,8 @@ public class MonsterState : MonoBehaviour
         if(isDead) return;
 
         hp -= (int)damage;
+        rend.material = matWhite;
+        Invoke("setMatDefault", 0.15f);
         
         if(hp <= 0) {
             damage += hp;
@@ -57,6 +77,10 @@ public class MonsterState : MonoBehaviour
         if(damage > 0) StartCoroutine(damagedText((int)damage));   
     }
 
+    void setMatDefault(){
+        rend.material = matDefault;
+    }
+
     
     IEnumerator dead(){
         isDead = true;
@@ -65,6 +89,7 @@ public class MonsterState : MonoBehaviour
         col.enabled = false;
         rigid.gravityScale = 0;
         rigid.velocity = new Vector2(0, 0);
+        dropSystem.coinDrop(minDropCoin, maxDropCoin, transform);
 
         Color temp = new Color(1f, 1f, 1f, 1f);
         while(temp.a > 0){
@@ -121,7 +146,7 @@ public class MonsterState : MonoBehaviour
         rigid.velocity = new Vector2(0, rigid.velocity.y);
         rigid.AddForce(v.normalized * power * 300f, ForceMode2D.Impulse);
         while(stunTime > 0){
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         rigid.velocity = new Vector2(0, rigid.velocity.y);
     }

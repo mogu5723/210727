@@ -45,6 +45,8 @@ public class Mob1_3AI : MonoBehaviour
         state.isDead = false;
         state.moveSpeed = 3;
         rend.enabled = true;
+        state.minDropCoin = 3; state.maxDropCoin = 5;
+        state.collisionDamage = 5;
 
         //개인 세팅
         actCoroutine = StartCoroutine(act0());

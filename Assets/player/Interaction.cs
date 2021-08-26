@@ -38,7 +38,7 @@ public class Interaction : MonoBehaviour
         if(other.tag == "mineral"){
             interactObj.Remove(other.gameObject);
         }else if(other.CompareTag("interactableObjects")){
-            interactObj.Add(other.gameObject);
+            interactObj.Remove(other.gameObject);
         }
     }
 
