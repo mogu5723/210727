@@ -41,9 +41,12 @@ public class ItemControl : MonoBehaviour
         if(invenSlot.count == 0) return;
         itemCode = invenSlot.itemCode;
 
-        if(itemCode == 0 && state.actionable() && invenSlot.cooldown <= 0){ //돌 던지기
+        if(itemCode == 0 && state.actionable() && invenSlot.cooldown <= 0 && state.stand){ //돌 던지기
             invenManager.deleteItem(pCtrl.slotSelectNumber-1, 1);
-            invenManager.StartCoroutine(invenManager.cooldown("projectile", 0.5f));
+            invenManager.StartCoroutine(invenManager.cooldown("projectile", 2f));
+            state.isInteractive = true;
+            pCtrl.anim.SetInteger("animNumber", 0);
+            Invoke("offInteraction", 0.1f);
 
             effectSystem.tempObjList.Add(itemObj = Instantiate(itemObjList[itemCode], transform.position, Quaternion.identity, effectSystemObj.transform));
 
@@ -67,5 +70,9 @@ public class ItemControl : MonoBehaviour
             clone = Instantiate(itemObjList[itemCode], transform.position+new Vector3(rend.flipX ? -1f : 1f , 0.5f), Quaternion.identity, mapobj.transform);
             clone.name = "movableStone";
         }
+    }
+
+    public void offInteraction(){
+        state.isInteractive = false;
     }
 }

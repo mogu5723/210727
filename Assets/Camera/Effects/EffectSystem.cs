@@ -56,6 +56,39 @@ public class EffectSystem : MonoBehaviour
         }
     }
 
+    public void collectingEffect(Vector3 pos, Color color, float range, float time, float endAlpha){
+        coroutineList.Add(StartCoroutine(collectingEffect_(pos, color, range, time, endAlpha)));
+    }
+
+    IEnumerator collectingEffect_(Vector3 pos, Color color, float range, float time, float endAlpha){
+        GameObject obj;
+        SpriteRenderer rend;
+        Rigidbody2D rigid;
+        float angle = Random.Range(0, Mathf.PI*2);
+
+        tempObjList.Add(obj = Instantiate(square, pos + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)))*range, Quaternion.identity));
+        rend = obj.GetComponent<SpriteRenderer>();
+        rigid = obj.GetComponent<Rigidbody2D>();
+        obj.SetActive(true);
+
+        Color tempColor = color;
+        rend.color = tempColor;
+        rigid.gravityScale = 0;
+        Vector3 velocity = (pos - obj.transform.position)/time;
+        rigid.velocity = velocity;
+
+        int repeat = (int)(time*50);
+        float alphaChangeRate = (endAlpha-tempColor.a)/repeat;
+        Vector3 dir = (pos - obj.transform.position)/repeat;
+        for(int i = 0; i < repeat; i++){
+            yield return new WaitForFixedUpdate();
+            rend.color += new Color(0, 0, 0, alphaChangeRate);
+            rigid.velocity = velocity;
+        }
+
+        Destroy(obj);
+    }
+
     public void deleteFrag(){
         int count = coroutineList.Count;
         for(int i = 0; i < count; i++){

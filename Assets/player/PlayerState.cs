@@ -168,6 +168,9 @@ public class PlayerState : MonoBehaviour
 
         knockbackState = false;
     }
+    public void offInteraction(){
+        isInteractive = false;
+    }
     public bool actionable(){
         if(stunState) return false;
         if(isInteractive) return false;

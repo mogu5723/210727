@@ -8,7 +8,7 @@ public class PlayerControl : MonoBehaviour
 {
     SpriteRenderer rend;
     Rigidbody2D rigid;
-    Animator anim;
+    public Animator anim;
 
     PlayerState state; Interaction interaction;
     public InventoryManager invenManager;
@@ -27,7 +27,7 @@ public class PlayerControl : MonoBehaviour
 
         isJumping = false;
 
-        transform.Find("Point Light 2D").GetComponent<Light2D>().intensity = 0.7f;
+        transform.Find("Point Light 2D").GetComponent<Light2D>().intensity = 0.3f;
 
         slotSelectNumber = 1; pastSlotNumber = 1;
     }

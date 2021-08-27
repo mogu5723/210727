@@ -6,6 +6,6 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class GlobalLight : MonoBehaviour
 {
     private void Awake() {
-        gameObject.GetComponent<Light2D>().intensity = 0.3f;
+        gameObject.GetComponent<Light2D>().intensity = 0.7f;
     }
 }
