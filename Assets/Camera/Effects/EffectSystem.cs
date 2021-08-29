@@ -7,6 +7,7 @@ public class EffectSystem : MonoBehaviour
     public List<GameObject> tempObjList;
     public List<Coroutine> coroutineList;
     GameObject square;
+    public PlayerState PState;
     private void Awake() {
         tempObjList = new List<GameObject>();
         coroutineList = new List<Coroutine>();
