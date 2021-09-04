@@ -72,9 +72,9 @@ public class PlayerState : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.O)){
-            dataManagement.SaveGameData();
+            dataManagement.SaveGameData(dataManagement.saveName);
         }else if(Input.GetKeyDown(KeyCode.P)){
-            dataManagement.LoadGameData();
+            dataManagement.LoadGameData(dataManagement.saveName);
         }
     }
 
@@ -96,7 +96,7 @@ public class PlayerState : MonoBehaviour
         if(hp <= 0 ) {
             invincibleTime = 0f;
             onPlayerDead.Invoke();
-            dataManagement.LoadGameData();
+            dataManagement.LoadGameData(dataManagement.saveName);
         }
         else if(damage > 0) deadStopCoroutines.Add(StartCoroutine(damagedText((int)damage)));   
     }

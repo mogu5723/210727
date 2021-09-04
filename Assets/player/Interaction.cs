@@ -68,8 +68,13 @@ public class Interaction : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && state.stand && state.actionable() && !state.isAttacking && interactObj.Count > 0 ){
             GameObject obj = GetCloseObject();
 
-            if(obj.name == "rock") StartCoroutine(mining(obj));
-            if(obj.name == "lever0") StartCoroutine(lever0Works(obj));
+            if(obj.name.Equals("rock")) StartCoroutine(mining(obj));
+            if(obj.name.Equals("lever0")) StartCoroutine(lever0Works(obj));
+            if(obj.name.Equals("savePoint")){
+                state.hp = state.maxHp;
+                state.dataManagement.SaveGameData(state.dataManagement.saveName);
+                state.dataManagement.LoadGameData(state.dataManagement.saveName);
+            }
         }
     }
 

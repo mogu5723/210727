@@ -15,4 +15,6 @@ public class GameData
     public int invenCount; public int[] invenItemCode; public int[] invenItemCount;
 
     public int goldAmount;
+
+    public bool[] coreIsContain; public bool[] coreIsTranslucent; public int[] coreNumber;
 }

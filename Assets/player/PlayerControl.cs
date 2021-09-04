@@ -106,6 +106,7 @@ public class PlayerControl : MonoBehaviour
 
     private void FixedUpdate() {
         rigid.WakeUp();
+        if(rigid.velocity.y < -25) rigid.velocity = new Vector2(rigid.velocity.x, -25f);
     }
 
     //attack

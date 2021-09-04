@@ -74,6 +74,9 @@ TextureImporter:
   - first:
       213: 7730550507558293011
     second: New Piskel_24
+  - first:
+      213: -7389562923782732075
+    second: New Piskel_25
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -695,6 +698,27 @@ TextureImporter:
       bones: []
       spriteID: 31e4a397abe684b60800000000000000
       internalID: 7730550507558293011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Piskel_25
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 64
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d688822caff27990800000000000000
+      internalID: -7389562923782732075
       vertices: []
       indices: 
       edges: []

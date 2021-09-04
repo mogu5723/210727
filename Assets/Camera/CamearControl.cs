@@ -19,7 +19,7 @@ public class CamearControl : MonoBehaviour
     private void Awake() {
         playerState = player.GetComponent<PlayerState>();
 
-        speed = 3f;
+        speed = 5f;
         mapCode[0] = 0;
         mapCode[1] = 0;
         height = Camera.main.orthographicSize;
